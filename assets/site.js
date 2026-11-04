@@ -214,7 +214,6 @@
     const counter = $('[data-menu-counter]', book);
     const prevButton = $('[data-menu-prev]', book);
     const nextButton = $('[data-menu-next]', book);
-    const singleQuery = window.matchMedia('(max-width: 640px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const pagePromises = new Map();
     const pages = Array.from({ length: 15 }, (_, index) => ({
@@ -223,7 +222,6 @@
     }));
     let current = 0;
     let animating = false;
-    let swipeStart = null;
 
     function setImage(img, page) {
       if (!img) return;
@@ -235,7 +233,7 @@
     function setPage(container, page) {
       if (!container) return;
       const image = $('img', container);
-      const isBlank = !page && !singleQuery.matches;
+      const isBlank = !page;
       container.classList.toggle('is-blank', isBlank);
       if (!image) return;
       if (!page) { image.hidden = true; image.removeAttribute('src'); image.alt = ''; return; }
@@ -245,8 +243,7 @@
     }
 
     function getSpread(index) {
-      if (singleQuery.matches) return [pages[index], null];
-      const start = index - index % 2;
+      const start = index - (index % 2);
       return [pages[start], pages[start + 1] || null];
     }
 
@@ -264,16 +261,10 @@
 
     function schedulePreload() {
       const run = () => {
-        if (singleQuery.matches) {
-          [current + 1, current + 2, current + 3].forEach(idx => {
-            if (pages[idx]) preload(pages[idx]);
-          });
-        } else {
-          const start = current - current % 2;
-          [start + 2, start + 3, start + 4, start + 5].forEach(idx => {
-            if (pages[idx]) preload(pages[idx]);
-          });
-        }
+        const start = current - (current % 2);
+        [start + 2, start + 3, start + 4, start + 5].forEach(idx => {
+          if (pages[idx]) preload(pages[idx]);
+        });
       };
       if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 1000 });
       else setTimeout(run, 150);
@@ -281,19 +272,17 @@
 
     function updateControls() {
       if (prevButton) prevButton.disabled = animating || current === 0;
-      if (nextButton) nextButton.disabled = animating || current >= pages.length - 1;
+      if (nextButton) nextButton.disabled = animating || current >= pages.length - 2;
       if (!counter) return;
-      if (singleQuery.matches) {
-        counter.textContent = `Trang ${current + 1} / ${pages.length}`;
-        return;
-      }
-      const start = current - current % 2;
+      const start = current - (current % 2);
       const end = Math.min(start + 1, pages.length - 1);
-      counter.textContent = start === end ? `Trang ${start + 1} / ${pages.length}` : `Trang ${start + 1}–${end + 1} / ${pages.length}`;
+      counter.textContent = start === end
+        ? `Trang ${start + 1} / ${pages.length}`
+        : `Trang ${start + 1}–${end + 1} / ${pages.length}`;
     }
 
     function renderPages() {
-      if (!singleQuery.matches) current -= current % 2;
+      current -= current % 2;
       const [left, right] = getSpread(current);
       setPage(leftPage, left);
       setPage(rightPage, right);
@@ -325,15 +314,16 @@
         requestAnimationFrame(() => {
           if (!finished) flip.classList.add('is-flipping');
         });
-        setTimeout(finish, singleQuery.matches ? 480 : 680);
+        setTimeout(finish, 650);
       });
     }
 
     async function go(direction) {
       if (animating) return;
-      const isSingle = singleQuery.matches;
-      const step = isSingle ? 1 : 2;
-      const target = direction === 'next' ? Math.min(current + step, pages.length - 1) : Math.max(current - step, 0);
+      const step = 2;
+      const target = direction === 'next'
+        ? Math.min(current + step, pages.length - 1)
+        : Math.max(current - step, 0);
       if (target === current) return;
 
       animating = true;
@@ -346,75 +336,36 @@
         return;
       }
 
-      if (isSingle) {
-        const oldPage = pages[current];
-        const newPage = pages[target];
-        preload(newPage);
+      const oldPages = getSpread(current);
+      const newPages = getSpread(target);
+      const frontPage = direction === 'next' ? oldPages[1] : oldPages[0];
+      const backPage = direction === 'next' ? newPages[0] : newPages[1];
 
-        if (direction === 'next') {
-          setPage(leftPage, newPage);
-          setImage(flipFront, oldPage);
-          setImage(flipBack, null);
-        } else {
-          setPage(leftPage, oldPage);
-          setImage(flipFront, newPage);
-          setImage(flipBack, null);
-        }
+      preload(newPages[0]);
+      if (newPages[1]) preload(newPages[1]);
 
-        await playFlipAnimation(direction, () => {
-          current = target;
-          renderPages();
-        });
+      if (direction === 'next') {
+        setPage(leftPage, oldPages[0]);
+        setPage(rightPage, newPages[1]);
       } else {
-        const oldPages = getSpread(current);
-        const newPages = getSpread(target);
-        const frontPage = direction === 'next' ? oldPages[1] : oldPages[0];
-        const backPage = direction === 'next' ? newPages[0] : newPages[1];
-
-        preload(newPages[0]);
-        if (newPages[1]) preload(newPages[1]);
-
-        if (direction === 'next') {
-          setPage(leftPage, oldPages[0]);
-          setPage(rightPage, newPages[1]);
-        } else {
-          setPage(leftPage, newPages[0]);
-          setPage(rightPage, oldPages[1]);
-        }
-
-        setImage(flipFront, frontPage);
-        setImage(flipBack, backPage);
-
-        await playFlipAnimation(direction, () => {
-          current = target;
-          renderPages();
-        });
+        setPage(leftPage, newPages[0]);
+        setPage(rightPage, oldPages[1]);
       }
+
+      setImage(flipFront, frontPage);
+      setImage(flipBack, backPage);
+
+      await playFlipAnimation(direction, () => {
+        current = target;
+        renderPages();
+      });
 
       animating = false;
       updateControls();
     }
 
-    const handleModeChange = () => {
-      if (animating) return;
-      if (!singleQuery.matches) current -= current % 2;
-      renderPages();
-    };
-    if (typeof singleQuery.addEventListener === 'function') singleQuery.addEventListener('change', handleModeChange);
-    else singleQuery.addListener(handleModeChange);
-
     prevButton?.addEventListener('click', () => go('prev'));
     nextButton?.addEventListener('click', () => go('next'));
-    leftPage?.addEventListener('click', event => {
-      if (singleQuery.matches || animating) return;
-      if (event.target.closest('a, button')) return;
-      go('prev');
-    });
-    rightPage?.addEventListener('click', event => {
-      if (singleQuery.matches || animating) return;
-      if (event.target.closest('a, button')) return;
-      go('next');
-    });
     book.addEventListener('keydown', event => {
       if (event.key === 'ArrowLeft') { event.preventDefault(); go('prev'); }
       else if (event.key === 'ArrowRight') { event.preventDefault(); go('next'); }
@@ -438,29 +389,135 @@
           go(dx < 0 ? 'next' : 'prev');
         }
       }, { passive: true });
+    }
 
-      stage.addEventListener('pointerdown', event => {
-        if (animating || event.pointerType === 'touch' || (event.pointerType === 'mouse' && event.button !== 0)) return;
-        swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    // Lightbox / Zoom Modal
+    const zoomModal = $('#menu-zoom-modal');
+    const zoomImg = $('#menu-zoom-img');
+    const zoomTitle = $('#menu-zoom-title');
+    const zoomPrev = $('[data-zoom-prev]');
+    const zoomNext = $('[data-zoom-next]');
+    let zoomIndex = 0;
+
+    function renderZoom() {
+      if (!zoomImg) return;
+      const page = pages[zoomIndex];
+      zoomImg.src = page.src;
+      zoomImg.alt = page.alt;
+      if (zoomTitle) zoomTitle.textContent = `Trang ${zoomIndex + 1} / ${pages.length}`;
+      if (zoomPrev) zoomPrev.disabled = zoomIndex === 0;
+      if (zoomNext) zoomNext.disabled = zoomIndex >= pages.length - 1;
+      if (pages[zoomIndex + 1]) preload(pages[zoomIndex + 1]);
+      if (pages[zoomIndex - 1]) preload(pages[zoomIndex - 1]);
+    }
+
+    function openZoom(index) {
+      if (!zoomModal || !zoomImg) return;
+      zoomIndex = Math.max(0, Math.min(pages.length - 1, index));
+      renderZoom();
+      zoomModal.hidden = false;
+      requestAnimationFrame(() => zoomModal.classList.add('open'));
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeZoom() {
+      if (!zoomModal) return;
+      zoomModal.classList.remove('open');
+      setTimeout(() => {
+        zoomModal.hidden = true;
+        document.body.classList.remove('no-scroll');
+        current = zoomIndex - (zoomIndex % 2);
+        renderPages();
+      }, 200);
+    }
+
+    zoomPrev?.addEventListener('click', () => {
+      if (zoomIndex > 0) { zoomIndex--; renderZoom(); }
+    });
+    zoomNext?.addEventListener('click', () => {
+      if (zoomIndex < pages.length - 1) { zoomIndex++; renderZoom(); }
+    });
+    $$('[data-zoom-close]').forEach(btn => btn.addEventListener('click', closeZoom));
+
+    if (zoomModal) {
+      let zTouchX = 0;
+      let zTouchY = 0;
+      zoomModal.addEventListener('touchstart', e => {
+        if (e.touches.length !== 1) return;
+        zTouchX = e.touches[0].clientX;
+        zTouchY = e.touches[0].clientY;
+      }, { passive: true });
+      zoomModal.addEventListener('touchend', e => {
+        if (e.changedTouches.length !== 1) return;
+        const dx = e.changedTouches[0].clientX - zTouchX;
+        const dy = e.changedTouches[0].clientY - zTouchY;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+          if (dx < 0 && zoomIndex < pages.length - 1) { zoomIndex++; renderZoom(); }
+          else if (dx > 0 && zoomIndex > 0) { zoomIndex--; renderZoom(); }
+        }
+      }, { passive: true });
+    }
+
+    function bindZoomTrigger(container, isRight) {
+      if (!container) return;
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isTouchSwipe = false;
+      let lastTouchTime = 0;
+
+      container.addEventListener('touchstart', e => {
+        if (e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isTouchSwipe = false;
+      }, { passive: true });
+
+      container.addEventListener('touchmove', e => {
+        if (e.touches.length !== 1) return;
+        if (Math.abs(e.touches[0].clientX - touchStartX) > 12 || Math.abs(e.touches[0].clientY - touchStartY) > 12) {
+          isTouchSwipe = true;
+        }
+      }, { passive: true });
+
+      container.addEventListener('touchend', e => {
+        if (animating || isTouchSwipe) return;
+        if (e.target.closest('a, button')) return;
+        lastTouchTime = Date.now();
+        const spreadStart = current - (current % 2);
+        const targetPage = isRight ? spreadStart + 1 : spreadStart;
+        if (targetPage < pages.length) openZoom(targetPage);
+        else openZoom(spreadStart);
       });
 
-      stage.addEventListener('pointerup', event => {
-        if (!swipeStart || event.pointerId !== swipeStart.id) return;
-        const dx = event.clientX - swipeStart.x;
-        const dy = event.clientY - swipeStart.y;
-        swipeStart = null;
-        if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-          go(dx < 0 ? 'next' : 'prev');
+      container.addEventListener('click', e => {
+        if (animating || (Date.now() - lastTouchTime < 450)) return;
+        if (e.target.closest('a, button')) return;
+        const spreadStart = current - (current % 2);
+        const targetPage = isRight ? spreadStart + 1 : spreadStart;
+        if (targetPage < pages.length) openZoom(targetPage);
+        else openZoom(spreadStart);
+      });
+
+      container.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const spreadStart = current - (current % 2);
+          const targetPage = isRight ? spreadStart + 1 : spreadStart;
+          if (targetPage < pages.length) openZoom(targetPage);
+          else openZoom(spreadStart);
         }
       });
-
-      stage.addEventListener('pointercancel', () => { swipeStart = null; });
     }
+
+    bindZoomTrigger(leftPage, false);
+    bindZoomTrigger(rightPage, true);
+
+    window.RIEU_ZOOM = { open: openZoom, close: closeZoom };
 
     renderPages();
   }
 
-  // Event delegation for controls inserted dynamically.
+    // Event delegation for controls inserted dynamically.
   document.addEventListener('click', event => {
     const add = event.target.closest('[data-add]');
     if (add) { updateCart(add.dataset.add, 1); return; }
@@ -530,9 +587,15 @@
     }
   }
   document.addEventListener('keydown',event=>{
-    if (event.key !== 'Escape') return;
-    closeCart();closeDialog();
-    const nav=$('#mobile-menu');if(nav){nav.classList.remove('open');$('#mobile-toggle')?.setAttribute('aria-expanded','false');}
+    const zoomModal = $('#menu-zoom-modal');
+    if (event.key === 'Escape') {
+      if (zoomModal && !zoomModal.hidden) { window.RIEU_ZOOM?.close(); return; }
+      closeCart();closeDialog();
+      const nav=$('#mobile-menu');if(nav){nav.classList.remove('open');$('#mobile-toggle')?.setAttribute('aria-expanded','false');}
+    } else if (zoomModal && !zoomModal.hidden) {
+      if (event.key === 'ArrowLeft') $('[data-zoom-prev]')?.click();
+      else if (event.key === 'ArrowRight') $('[data-zoom-next]')?.click();
+    }
   });
   renderConfig();renderFeatured();renderFilters();renderMenu();renderMenuPages();renderCart();try{initMenuBook();}catch(e){console.error("Menu book init error:",e);}
 })();

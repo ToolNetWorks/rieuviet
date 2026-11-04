@@ -1,8 +1,8 @@
 <!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#752832">
  <title>Chính sách hoàn / hủy | RIEU VIỆT — Lẩu Riêu &amp; Ẩm Thực Việt</title><meta name="description" content="Quy trình xử lý yêu cầu hủy bàn, đổi món và hoàn tiền"><link rel="canonical" href="https://rieuviet.com/chinh-sach-hoan-huy">
  <meta property="og:type" content="website"><meta property="og:locale" content="vi_VN"><meta property="og:site_name" content="RIEU VIỆT"><meta property="og:title" content="Chính sách hoàn / hủy | RIEU VIỆT — Lẩu Riêu &amp; Ẩm Thực Việt"><meta property="og:description" content="Quy trình xử lý yêu cầu hủy bàn, đổi món và hoàn tiền"><meta property="og:url" content="https://rieuviet.com/chinh-sach-hoan-huy"><meta property="og:image" content="https://rieuviet.com/assets/images/lau-rieu-450.webp"><meta name="twitter:card" content="summary_large_image">
- <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/styles.css?v=8df76979"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <script defer src="/assets/config.js?v=82297915"></script><script defer src="/assets/menu-data.js?v=dee0e297"></script><script defer src="/assets/site.js?v=2e409b3c"></script></head>
+ <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/styles.css?v=8693c13b"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <script defer src="/assets/config.js?v=82297915"></script><script defer src="/assets/menu-data.js?v=dee0e297"></script><script defer src="/assets/site.js?v=35c2ce9b"></script></head>
  <body><a href="#main" class="skip">Bỏ qua điều hướng</a>
  <div class="header-top">RIEU VIỆT &nbsp;·&nbsp; THƯỞNG LẨU ĐẬM ĐÀ, SUM VẦY TRỌN VỊ</div>
  <header class="header"><div class="container header-inner">
@@ -19,4 +19,21 @@
  <div class="cart-items" id="cart-items"></div><div class="cart-foot"><div class="cart-total"><span>Tổng theo menu</span><strong id="cart-total">0đ</strong></div><button id="order-button" class="btn" disabled>Chuẩn bị yêu cầu đặt món</button><p>Đây là danh sách dự kiến. Nhà hàng chỉ xác nhận món và giá sau khi liên hệ trực tiếp; chưa thanh toán trên website.</p></div></aside>
  <div id="dialog-overlay" class="dialog-overlay"></div><section id="order-dialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="order-dialog-title"><div class="dialog-head"><h2 id="order-dialog-title">Yêu cầu đặt món</h2><button class="icon-btn" id="dialog-close" aria-label="Đóng">×</button></div><p style="font-size:12px;color:#706258">Điền thông tin để tạo tin nhắn đặt trước món. Nhân viên quán cần xác nhận trước khi đơn có hiệu lực.</p>
  <form id="order-form"><div class="field"><label for="order-name">Họ và tên *</label><input id="order-name" name="name" required maxlength="80" autocomplete="name" placeholder="Họ tên khách hàng"></div><div class="field"><label for="order-phone">Số điện thoại *</label><input id="order-phone" name="phone" type="tel" required minlength="9" maxlength="16" pattern="[+0-9 ]{9,16}" placeholder="Số liên hệ" autocomplete="tel"></div><div class="field"><label for="order-note">Ghi chú</label><textarea id="order-note" name="note" maxlength="500" placeholder="Thời gian dự kiến, số người... (nếu có)"></textarea></div><button class="btn" type="submit" style="width:100%">Sao chép nội dung đặt món</button></form><p id="order-output" class="form-message" style="white-space:pre-wrap"></p><a class="text-link" data-link="phone" href="/lien-he.html">Liên hệ quán để xác nhận</a></section>
- <div id="toast" class="toast" role="status" aria-live="polite"></div></body></html>
+ <div id="toast" class="toast" role="status" aria-live="polite"></div>
+ <div id="menu-zoom-modal" class="menu-zoom-modal" role="dialog" aria-modal="true" aria-label="Xem phóng to trang thực đơn" hidden>
+   <div class="menu-zoom-backdrop" data-zoom-close></div>
+   <div class="menu-zoom-dialog">
+     <div class="menu-zoom-bar">
+       <span class="menu-zoom-title" id="menu-zoom-title">Trang 1 / 15</span>
+       <div class="menu-zoom-actions">
+         <button class="menu-zoom-btn" type="button" data-zoom-prev aria-label="Trang trước">‹ Trước</button>
+         <button class="menu-zoom-btn" type="button" data-zoom-next aria-label="Trang sau">Sau ›</button>
+         <button class="menu-zoom-close" type="button" data-zoom-close aria-label="Đóng phóng to">✕ Đóng</button>
+       </div>
+     </div>
+     <div class="menu-zoom-body">
+       <img id="menu-zoom-img" alt="Trang thực đơn phóng to" width="901" height="1680" draggable="false">
+     </div>
+     <div class="menu-zoom-hint">Chạm hoặc vuốt trái/phải để chuyển trang · Bấm ✕ hoặc chạm ngoài để đóng</div>
+   </div>
+ </div></body></html>
