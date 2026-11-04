@@ -1,0 +1,46 @@
+.contact-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.contact-tile {
+  padding: 22px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+
+.contact-tile b {
+  display: block;
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.contact-tile p {
+  color: var(--ink-sub);
+  font-size: 12px;
+  margin: 0;
+}
+
+.contact-tile a {
+  color: var(--wine);
+  text-decoration: underline;
+}
+
+.notice {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  font-size: 12px;
+  color: var(--ink-sub);
+  border-radius: 4px;
+}
+
+@media (max-width: 760px) {
+  .contact-strip {
+    grid-template-columns: 1fr;
+  }
+}

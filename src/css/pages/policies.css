@@ -1,0 +1,38 @@
+.prose {
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 42px 48px;
+  border-radius: 6px;
+  line-height: 1.9;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.prose h2 {
+  font-size: 20px;
+  margin: 28px 0 10px;
+  color: var(--wine);
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+}
+
+.prose p {
+  color: var(--ink-sub);
+  margin-bottom: 14px;
+}
+
+.prose .note {
+  background: var(--cream);
+  padding: 14px 18px;
+  border-left: 3px solid var(--wine);
+  margin: 22px 0;
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  .prose {
+    padding: 26px 22px;
+  }
+}

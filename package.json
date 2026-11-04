@@ -1,0 +1,22 @@
+{
+  "name": "rieuviet",
+  "version": "1.1.0",
+  "description": "Website nhà hàng RIEU VIỆT — Lẩu Riêu Đậm Đà Hương Việt. Kiến trúc modular, production-ready.",
+  "scripts": {
+    "build:css": "esbuild src/css/main.css --bundle --minify --outfile=assets/styles.css",
+    "build:js": "esbuild src/js/main.js --bundle --minify --format=iife --outfile=assets/site.js",
+    "build:html": "python3 build_pages.py",
+    "build": "npm run build:css && npm run build:js && npm run build:html",
+    "lint": "node tests/lint.js",
+    "test": "python3 tests/check_site.py && node tests/test_regression.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ToolNetWorks/rieuviet.git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "puppeteer-core": "^24.4.0"
+  }
+}

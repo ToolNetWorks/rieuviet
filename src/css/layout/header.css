@@ -1,0 +1,210 @@
+.header-top {
+  background: var(--wine-dark);
+  color: #fff0d8;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  padding: 10px 8px;
+  font-weight: 600;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 253, 250, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  z-index: 70;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  height: var(--header-height);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand-emblem {
+  width: 43px;
+  height: 43px;
+  background: var(--wine);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fceac9;
+  flex: 0 0 43px;
+}
+
+.brand-emblem svg {
+  width: 28px;
+}
+
+.brand-copy {
+  line-height: 1.12;
+}
+
+.brand-copy strong {
+  display: block;
+  font-size: 20px;
+  color: var(--wine);
+  letter-spacing: 0.06em;
+  font-weight: 800;
+}
+
+.brand-copy small {
+  display: block;
+  font-size: 9px;
+  color: var(--ink-sub);
+  letter-spacing: 0.11em;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav a {
+  font-size: 12px;
+  font-weight: 700;
+  color: #504440;
+}
+
+.nav a.active,
+.nav a:hover {
+  color: var(--wine);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.basket-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--wine);
+  position: relative;
+}
+
+.basket-count {
+  position: absolute;
+  top: -6px;
+  right: -5px;
+  background: var(--wine);
+  color: white;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.hamburger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--wine);
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 1060px) {
+  .nav {
+    gap: 15px;
+  }
+  .header-actions .btn {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .header-top {
+    font-size: 9px;
+    padding: 7px 4px;
+    letter-spacing: 0.09em;
+  }
+  .header-inner {
+    gap: 8px;
+  }
+  .brand-copy strong {
+    font-size: 16px;
+  }
+  .brand-copy small {
+    font-size: 7px;
+  }
+  .brand-emblem {
+    width: 37px;
+    height: 37px;
+    flex-basis: 37px;
+  }
+  .nav {
+    display: none;
+  }
+  .hamburger {
+    display: inline-flex;
+  }
+  .mobile-menu {
+    display: none;
+    border-top: 1px solid var(--line);
+    padding: 14px 16px 18px;
+    background: white;
+  }
+  .mobile-menu.open {
+    display: grid;
+    gap: 8px;
+  }
+  .mobile-menu a {
+    padding: 9px 10px;
+    font-weight: 700;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 385px) {
+  .header-actions {
+    gap: 6px;
+  }
+  .brand {
+    gap: 6px;
+  }
+  .brand-copy strong {
+    font-size: 14px;
+  }
+  .basket-trigger {
+    width: 37px;
+    height: 37px;
+  }
+  .hamburger {
+    width: 37px;
+    height: 37px;
+  }
+}

@@ -1,0 +1,137 @@
+.menu-zoom-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.menu-zoom-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-zoom-modal[hidden] {
+  display: none;
+}
+
+.menu-zoom-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 7, 7, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.menu-zoom-dialog {
+  position: relative;
+  z-index: 2;
+  width: min(900px, calc(100% - 20px));
+  height: min(95dvh, 940px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px 12px;
+}
+
+.menu-zoom-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(28, 16, 15, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 8px;
+}
+
+.menu-zoom-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fcecd2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.menu-zoom-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-zoom-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fcecd2;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.18s, color 0.18s;
+}
+
+.menu-zoom-btn:hover:not(:disabled) {
+  background: #fcecd2;
+  color: #291518;
+}
+
+.menu-zoom-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.menu-zoom-close {
+  background: var(--wine);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.18s;
+}
+
+.menu-zoom-close:hover {
+  background: var(--wine-dark);
+}
+
+.menu-zoom-body {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y;
+}
+
+.menu-zoom-body img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-zoom-hint {
+  color: #c4b7aa;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  margin-top: 6px;
+}

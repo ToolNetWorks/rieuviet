@@ -1,0 +1,543 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 76% 34%, #8e343b 0%, #67222a 38%, #4d1821 80%);
+  color: #fff;
+  padding: 80px 0 95px;
+}
+
+.hero:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.09;
+  pointer-events: none;
+  background-image: repeating-radial-gradient(circle at center, transparent 0 3px, #fff 3px 4px);
+  background-size: 48px 48px;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 0.96fr 1.04fr;
+  gap: 38px;
+  align-items: center;
+  position: relative;
+}
+
+.hero-copy .line {
+  height: 1px;
+  width: 60px;
+  background: var(--gold);
+  margin: 24px 0;
+}
+
+.hero h1 {
+  font-size: clamp(51px, 5.4vw, 83px);
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  margin: 14px 0 24px;
+}
+
+.hero h1 em {
+  color: #f9d5a0;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.hero p.lead {
+  color: #f6e1d8;
+  max-width: 480px;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 13px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.hero-buttons .btn {
+  padding: 16px 23px;
+}
+
+.hero-visual {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-plate {
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  position: relative;
+  border: 1px solid rgba(255, 230, 200, 0.25);
+  box-shadow: 0 40px 100px rgba(18, 5, 8, 0.65);
+  background: radial-gradient(circle at 45% 45%, #e0ab72, #752832);
+}
+
+.hero-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.hero-seal {
+  position: absolute;
+  right: 25px;
+  bottom: 25px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--wine-dark);
+  border: 1px solid var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.hero-seal strong {
+  font-size: 25px;
+  color: #ffe1b5;
+  line-height: 1;
+}
+
+.hero-seal span {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #f8dbd0;
+}
+
+.hero-food-caption {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 27px;
+  color: #f7dfbe;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+.hero-stat {
+  display: flex;
+  gap: 30px;
+  margin-top: 45px;
+}
+
+.hero-stat div {
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  padding-left: 14px;
+}
+
+.hero-stat strong {
+  display: block;
+  font-size: 22px;
+  color: #f9dfb9;
+}
+
+.hero-stat span {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f3cfc2;
+}
+
+.intro-strip {
+  background: #e9dec9;
+  padding: 24px 0;
+}
+
+.intro-strip .container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.intro-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 0 20px;
+  border-right: 1px solid rgba(102, 69, 41, 0.18);
+}
+
+.intro-item:last-child {
+  border-right: 0;
+}
+
+.intro-item b {
+  font-size: 13px;
+}
+
+.intro-item p {
+  font-size: 11px;
+  color: #6c594c;
+  margin: 4px 0 0;
+}
+
+.intro-icon {
+  height: 44px;
+  min-width: 44px;
+  border: 1px solid #bfa583;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+  color: var(--wine);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.food-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0 5px 35px rgba(77, 49, 30, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.food-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+}
+
+.food-image {
+  position: relative;
+  height: 230px;
+  background: linear-gradient(135deg, #e8d0a1, #f2e0bb);
+  overflow: hidden;
+}
+
+.food-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 0.4s;
+}
+
+.food-card:hover .food-image img {
+  transform: scale(1.06);
+}
+
+.food-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 11px;
+  color: #fff;
+  background: var(--wine);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.food-content {
+  padding: 23px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.food-content h3 {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 700;
+  margin: 0;
+}
+
+.food-detail {
+  color: var(--ink-sub);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.food-bottom {
+  margin-top: auto;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--wine);
+  white-space: nowrap;
+}
+
+.story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 80px;
+}
+
+.story-art {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  align-items: center;
+}
+
+.story-art img {
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  background: #e8d3a4;
+  object-fit: cover;
+  width: 100%;
+  height: 360px;
+}
+
+.story-art img:first-child {
+  transform: translateY(-22px);
+}
+
+.story-art img:last-child {
+  transform: translateY(22px);
+}
+
+.story-copy h2 {
+  font-size: clamp(36px, 4vw, 57px);
+  letter-spacing: -0.045em;
+  font-weight: 600;
+  margin: 17px 0 26px;
+}
+
+.story-copy p {
+  color: var(--ink-sub);
+  max-width: 480px;
+}
+
+.stroke {
+  height: 2px;
+  width: 52px;
+  background: var(--gold);
+  margin: 24px 0;
+}
+
+.quote {
+  padding: 20px 0 20px 20px;
+  border-left: 3px solid var(--gold);
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+  line-height: 1.45;
+  color: var(--wine);
+}
+
+.story-actions {
+  margin-top: 27px;
+}
+
+.reservation {
+  background: var(--wine);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.reservation:after {
+  content: 'R';
+  position: absolute;
+  right: 8%;
+  top: -100px;
+  font-family: 'Playfair Display', serif;
+  font-size: 400px;
+  color: rgba(255, 255, 255, 0.045);
+  pointer-events: none;
+}
+
+.reservation-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.reservation h2 {
+  font-size: clamp(39px, 4.2vw, 59px);
+  font-weight: 600;
+  margin: 14px 0 20px;
+}
+
+.reservation p {
+  color: #efdad1;
+}
+
+.reservation-box p {
+  color: var(--ink-sub);
+}
+
+.reservation-inner > * {
+  min-width: 0;
+}
+
+.reservation-box {
+  min-width: 0;
+  background: white;
+  color: var(--ink);
+  padding: 35px;
+  border-radius: 6px;
+  box-shadow: 0 25px 65px rgba(20, 7, 5, 0.19);
+}
+
+.reservation-box h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.reservation-box .btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 1060px) {
+  .hero h1 {
+    font-size: 61px;
+  }
+  .hero-visual {
+    min-height: 420px;
+  }
+  .hero-plate {
+    width: 380px;
+    height: 380px;
+  }
+  .featured-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .story {
+    gap: 45px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    padding: 49px 0 72px;
+  }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .hero h1 {
+    font-size: clamp(51px, 11vw, 74px);
+  }
+  .hero p.lead {
+    font-size: 12px;
+  }
+  .hero-visual {
+    min-height: 340px;
+    margin-top: 15px;
+  }
+  .hero-plate {
+    width: min(340px, 80vw);
+    height: min(340px, 80vw);
+  }
+  .hero-seal {
+    width: 94px;
+    height: 94px;
+    right: 5px;
+    bottom: -4px;
+  }
+  .hero-seal strong {
+    font-size: 21px;
+  }
+  .hero-seal span {
+    font-size: 7px;
+  }
+  .hero-food-caption {
+    font-size: 21px;
+    top: 0;
+  }
+  .hero-stat {
+    margin-top: 28px;
+    gap: 20px;
+  }
+  .hero-stat strong {
+    font-size: 18px;
+  }
+  .featured-grid,
+  .intro-strip .container,
+  .story,
+  .reservation-inner {
+    grid-template-columns: 1fr;
+  }
+  .featured-grid {
+    gap: 13px;
+  }
+  .food-image {
+    height: 245px;
+  }
+  .intro-strip {
+    padding: 24px 0;
+  }
+  .intro-strip .container {
+    gap: 14px;
+  }
+  .intro-item {
+    border-right: 0;
+    padding: 0;
+  }
+  .story {
+    gap: 30px;
+  }
+  .story-art img {
+    height: 255px;
+  }
+  .story-copy h2 {
+    font-size: 41px;
+  }
+  .reservation-inner {
+    gap: 25px;
+  }
+  .reservation-box {
+    padding: 18px;
+  }
+  .reservation-box .field input,
+  .reservation-box .field select,
+  .reservation-box .field textarea {
+    font-size: 16px;
+  }
+  .food-bottom .price {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 385px) {
+  .hero h1 {
+    font-size: 48px;
+  }
+  .hero-buttons .btn {
+    padding: 13px 14px;
+    font-size: 11px;
+  }
+  .hero-stat {
+    gap: 9px;
+  }
+  .hero-stat div {
+    padding-left: 10px;
+  }
+}

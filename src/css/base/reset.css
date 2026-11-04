@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--cream);
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.18s, background-color 0.18s, transform 0.18s, border-color 0.18s;
+}
+
+a:hover {
+  color: var(--wine);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: color 0.18s, background-color 0.18s, transform 0.18s, border-color 0.18s;
+}
+
+::selection {
+  color: white;
+  background: var(--wine);
+}
+
+:focus-visible {
+  outline: 3px solid #c49b56;
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  top: -80px;
+  left: 14px;
+  z-index: 10000;
+  padding: 10px;
+  background: white;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
