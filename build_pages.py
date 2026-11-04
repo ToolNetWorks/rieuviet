@@ -61,9 +61,51 @@ home='''<section class="hero"><div class="container hero-inner"><div class="hero
  <div class="intro-item"><span class="intro-icon">03</span><div><b>Đặt bàn dễ dàng</b><p>Chuẩn bị yêu cầu để liên hệ xác nhận</p></div></div>
  </div></section>
  <section class="section" id="mon-noi-bat"><div class="container"><div class="section-heading"><div class="eyebrow">GỢI Ý HÔM NAY</div><h2>Vị ngon làm nên cuộc hẹn</h2><p>Các set lẩu nổi bật từ thực đơn chính thức do nhà hàng cung cấp.</p></div>
- <div class="featured-grid" id="featured-grid"></div><div class="center-action"><a href="/thuc-don.html" class="btn outline">XEM TOÀN BỘ THỰC ĐƠN <span aria-hidden="true">↗</span></a></div></div></section>
+ <div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn Rieu Viet">
+    <div class="menu-book-stage">
+      <div class="menu-book-spread">
+        <div class="menu-book-page menu-book-page--left">
+          <img src="/assets/images/menu-page-01.webp" alt="Trang 1 trong thực đơn Rieu Viet" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
+        </div>
+        <div class="menu-book-page menu-book-page--right">
+          <img src="/assets/images/menu-page-02.webp" alt="Trang 2 trong thực đơn RIEU VIỆT" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
+          <span class="menu-book-end" aria-hidden="true">Rieu Viet</span>
+        </div>
+        <div class="menu-book-flip" data-menu-flip aria-hidden="true">
+          <div class="menu-book-flip-face menu-book-flip-front"><img alt="" width="901" height="1680" draggable="false"></div>
+          <div class="menu-book-flip-face menu-book-flip-back"><img alt="" width="901" height="1680" draggable="false"></div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-book-controls">
+      <button class="menu-book-btn" type="button" data-menu-prev disabled>Trang trước</button>
+      <p class="menu-book-counter" data-menu-counter aria-live="polite">Trang 1–2 / 15</p>
+      <button class="menu-book-btn" type="button" data-menu-next>Trang sau</button>
+    </div>
+  </div></div></section>
  <section class="section" style="padding-top:30px;padding-bottom:95px"><div class="container story"><div class="story-art"><img src="/assets/images/lau-hai-san.webp" alt="Set lẩu hải sản trong thực đơn RIEU VIỆT" loading="lazy"><img src="/assets/images/lau-rieu-550.webp" alt="Set lẩu riêu 550K trong thực đơn RIEU VIỆT" loading="lazy"></div><div class="story-copy"><div class="eyebrow">HƯƠNG VỊ ĐƯỢC GÌN GIỮ</div><h2>Ngồi bên nồi lẩu,<br>gần nhau hơn.</h2><div class="stroke"></div><p>Bữa ăn ngon không chỉ nằm ở món ăn mà còn ở khoảnh khắc mọi người cùng ngồi lại. RIEU VIỆT mang đến lựa chọn từ lẩu riêu, lẩu gà nấm, hải sản đến các món ăn kèm.</p><div class="quote">“Đậm đà hương Việt”</div><div class="story-actions"><a class="text-link" href="/thuc-don.html">Khám phá hương vị RIEU VIỆT <span aria-hidden="true">↗</span></a></div></div></div></section>
- <section class="section dark-feature"><div class="container"><div><div class="eyebrow gold">TỪ THỰC ĐƠN CỦA QUÁN</div><h2>Không chỉ có<br>lẩu riêu.</h2><p>Lẩu hải sản, lẩu gà nấm, bò Tứ Xuyên và nhiều món nhúng, món ăn kèm được thể hiện trong menu.</p><a class="btn light" href="/thuc-don.html" style="margin-top:22px">XEM MENU & BẢNG GIÁ</a></div><div class="feature-menu"><img src="/assets/images/menu-page-01.webp" alt="Trang menu lẩu riêu Việt" loading="lazy"><img src="/assets/images/menu-page-02.webp" alt="Trang menu lẩu hải sản và chim câu" loading="lazy"><img src="/assets/images/menu-page-14.webp" alt="Trang menu đồ nhúng" loading="lazy"></div></div></section>
+ <section class="section dark-feature"><div class="container"><div><div class="eyebrow gold">TỪ THỰC ĐƠN CỦA QUÁN</div><h2>Không chỉ có<br>lẩu riêu.</h2><p>Lẩu hải sản, lẩu gà nấm, bò Tứ Xuyên và nhiều món nhúng, món ăn kèm được thể hiện trong menu.</p><a class="btn light" href="/thuc-don.html" style="margin-top:22px">XEM MENU & BẢNG GIÁ</a></div><div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn Rieu Viet">
+  <div class="menu-book-stage">
+    <div class="menu-book-spread">
+      <div class="menu-book-page menu-book-page--left">
+        <img src="/assets/images/menu-page-01.webp" alt="Trang 1 trong thực đơn Rieu Viet" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
+      </div>
+      <div class="menu-book-page menu-book-page--right">
+        <img src="/assets/images/menu-page-02.webp" alt="Trang 2 trong thực đơn Rieu Viet" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
+        <span class="menu-book-end" aria-hidden="true">Rieu Viet</span>
+      </div>
+      <div class="menu-book-flip" data-menu-flip aria-hidden="true">
+        <div class="menu-book-flip-face menu-book-flip-front"><img alt="" width="901" height="1680" draggable="false"></div>
+        <div class="menu-book-flip-face menu-book-flip-back"><img alt="" width="901" height="1680" draggable="false"></div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-book-controls">
+    <button class="menu-book-btn" type="button" data-menu-prev disabled>Trang trước</button>
+    <p class="menu-book-counter" data-menu-counter aria-live="polite">Trang 1–2 / 15</p>
+    <button class="menu-book-btn" type="button" data-menu-next>Trang sau</button>
+  </div>
+</div></div></section>
  <section id="dat-ban" class="section reservation"><div class="container reservation-inner"><div><div class="eyebrow gold">LÊN LỊCH GẶP NHAU</div><h2>Hẹn nhau<br>bên nồi lẩu.</h2><p>Chuẩn bị thông tin đặt bàn để liên hệ nhà hàng. Yêu cầu chỉ được xác nhận khi có phản hồi trực tiếp từ quán.</p><div style="padding:22px 0"><b>Giờ phục vụ</b><p data-config="openingHours"></p><b>Liên hệ</b><p><a data-link="phone" href="/lien-he.html" style="color:#ffe0b6" data-config="phone"></a></p></div></div>
  <div class="reservation-box"><h3>Gửi thông tin đặt bàn</h3><p class="muted" style="font-size:11px">Điền thông tin bên dưới để tạo phiếu đặt bàn.</p><form id="booking-form"><div class="field-grid"><div class="field"><label for="booking-name">Họ và tên *</label><input id="booking-name" name="name" autocomplete="name" required maxlength="80" placeholder="Họ tên khách"></div><div class="field"><label for="booking-phone">Số điện thoại *</label><input id="booking-phone" name="phone" type="tel" required minlength="9" maxlength="16" pattern="[+0-9 ]{9,16}" autocomplete="tel" placeholder="Số liên hệ"></div><div class="field"><label for="booking-date">Ngày đến *</label><input id="booking-date" name="date" type="date" required></div><div class="field"><label for="booking-time">Giờ dự kiến *</label><select id="booking-time" name="time" required aria-label="Giờ dự kiến"><option value="">Chọn giờ</option><option value="00:00">00:00</option><option value="00:30">00:30</option><option value="01:00">01:00</option><option value="01:30">01:30</option><option value="02:00">02:00</option><option value="02:30">02:30</option><option value="03:00">03:00</option><option value="03:30">03:30</option><option value="04:00">04:00</option><option value="04:30">04:30</option><option value="05:00">05:00</option><option value="05:30">05:30</option><option value="06:00">06:00</option><option value="06:30">06:30</option><option value="07:00">07:00</option><option value="07:30">07:30</option><option value="08:00">08:00</option><option value="08:30">08:30</option><option value="09:00">09:00</option><option value="09:30">09:30</option><option value="10:00">10:00</option><option value="10:30">10:30</option><option value="11:00">11:00</option><option value="11:30">11:30</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="14:00">14:00</option><option value="14:30">14:30</option><option value="15:00">15:00</option><option value="15:30">15:30</option><option value="16:00">16:00</option><option value="16:30">16:30</option><option value="17:00">17:00</option><option value="17:30">17:30</option><option value="18:00">18:00</option><option value="18:30">18:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option><option value="22:00">22:00</option><option value="22:30">22:30</option><option value="23:00">23:00</option><option value="23:30">23:30</option></select></div><div class="field field-wide"><label for="booking-guests">Số khách *</label><select id="booking-guests" name="guests" required><option value="">Chọn số khách</option><option>1–2 người</option><option>3–4 người</option><option>5–6 người</option><option>7–10 người</option><option>Trên 10 người</option></select></div><div class="field field-wide"><label for="booking-note">Yêu cầu thêm (nếu có)</label><textarea id="booking-note" name="note" maxlength="500" placeholder="Ví dụ: bàn gia đình, vị trí ngồi..."></textarea></div></div><button class="btn" type="submit">SAO CHÉP YÊU CẦU ĐẶT BÀN</button><p class="form-message" id="booking-output" style="white-space:pre-wrap">Website chưa nhận đặt bàn tự động. Hãy liên hệ nhà hàng để được xác nhận.</p></form></div></div></section>'''
 (ROOT/'index.html').write_text(page('Trang chủ','Khám phá thực đơn RIEU VIỆT — lẩu riêu set 350K, 450K, 550K, cùng nhiều món lẩu và món ăn kèm. Xem menu, bảng giá và thông tin đặt bàn.', 'index',home,'/'),encoding='utf-8')
