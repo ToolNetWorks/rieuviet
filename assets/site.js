@@ -247,6 +247,19 @@
     const iso = [local.getFullYear(),String(local.getMonth()+1).padStart(2,'0'),String(local.getDate()).padStart(2,'0')].join('-');
     bookingDate.min=iso;
   }
+  const floatCart = $('#float-cart-count')?.closest('.float-cart');
+  const bookingBox = $('#dat-ban .reservation-box');
+  if (floatCart && bookingBox && 'IntersectionObserver' in window) {
+    const setFloatCartHidden = hidden => {
+      floatCart.classList.toggle('is-hidden', hidden);
+      floatCart.setAttribute('aria-hidden', String(hidden));
+      floatCart.tabIndex = hidden ? -1 : 0;
+      if (hidden && document.activeElement === floatCart) floatCart.blur();
+    };
+    new IntersectionObserver(entries => {
+      setFloatCartHidden(entries.some(entry => entry.isIntersecting));
+    }, { threshold: 0.01 }).observe(bookingBox);
+  }
   document.addEventListener('keydown',event=>{
     if (event.key !== 'Escape') return;
     closeCart();closeDialog();
