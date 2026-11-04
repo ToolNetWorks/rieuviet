@@ -2,12 +2,68 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
-    {"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
-    {"source": "/(.*)", "headers": [
-      {"key": "X-Content-Type-Options", "value": "nosniff"},
-      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
-      {"key": "X-Frame-Options", "value": "SAMEORIGIN"},
-      {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()"}
-    ]}
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800"}
+      ]
+    },
+    {
+      "source": "/assets/images/(.*)",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400"}
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(css|js)",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/assets/styles.css",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/assets/site.js",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/assets/config.js",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/assets/menu-data.js",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+        {"key": "X-Frame-Options", "value": "SAMEORIGIN"},
+        {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()"}
+      ]
+    }
   ]
 }

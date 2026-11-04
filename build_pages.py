@@ -1,6 +1,19 @@
 from pathlib import Path
 from html import escape
+import hashlib
+
 ROOT=Path(__file__).resolve().parent
+
+def asset_hash(rel_path):
+    p = ROOT / rel_path
+    if p.is_file():
+        return hashlib.md5(p.read_bytes()).hexdigest()[:8]
+    return '1'
+
+CSS_V = asset_hash('assets/styles.css')
+CONFIG_V = asset_hash('assets/config.js')
+MENU_DATA_V = asset_hash('assets/menu-data.js')
+SITE_V = asset_hash('assets/site.js')
 LINKS=[('Trang chủ','/','index'),('Thực đơn','/thuc-don.html','thuc-don'),('Giới thiệu','/gioi-thieu.html','gioi-thieu'),('Liên hệ','/lien-he.html','lien-he')]
 POLICIES=[('Thanh toán','/chinh-sach-thanh-toan.html'),('Hoàn / hủy','/chinh-sach-hoan-huy.html'),('Giao nhận','/chinh-sach-giao-nhan.html'),('Bảo mật','/chinh-sach-bao-mat.html'),('Điều khoản','/dieu-khoan-su-dung.html')]
 EMBLEM='<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 23h26c0 9-6 14-13 14S7 32 7 23Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 23h32M15 18c-4-5 4-7 1-13m9 13c-4-5 4-7 1-13" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"/></svg>'
@@ -41,8 +54,8 @@ def page(title,desc,active,content,canonical,og_type='website'):
  return f'''<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#752832">
  <title>{escape(titlefull)}</title><meta name="description" content="{escape(desc,quote=True)}"><link rel="canonical" href="https://rieuviet.com{canonical}">
  <meta property="og:type" content="{og_type}"><meta property="og:locale" content="vi_VN"><meta property="og:site_name" content="RIEU VIỆT"><meta property="og:title" content="{escape(titlefull,quote=True)}"><meta property="og:description" content="{escape(desc,quote=True)}"><meta property="og:url" content="https://rieuviet.com{canonical}"><meta property="og:image" content="https://rieuviet.com/assets/images/lau-rieu-450.webp"><meta name="twitter:card" content="summary_large_image">
- <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/styles.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <script defer src="/assets/config.js"></script><script defer src="/assets/menu-data.js"></script><script defer src="/assets/site.js"></script></head>
+ <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/styles.css?v={CSS_V}"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <script defer src="/assets/config.js?v={CONFIG_V}"></script><script defer src="/assets/menu-data.js?v={MENU_DATA_V}"></script><script defer src="/assets/site.js?v={SITE_V}"></script></head>
  <body>{header(active)}<main id="main">{content}</main>{footer()}{overlays()}</body></html>'''
 
 def pagehero(tag,title,sub):
@@ -63,15 +76,15 @@ home='''<section class="hero"><div class="container hero-inner"><div class="hero
 <section class="section" id="mon-noi-bat"><div class="container"><div class="section-heading"><div class="eyebrow">GỢI Ý HÔM NAY</div><h2>Vị ngon làm nên cuộc hẹn</h2><p>Các set lẩu nổi bật từ thực đơn chính thức do nhà hàng cung cấp.</p></div>
 <div class="featured-grid" id="featured-grid"></div><div class="center-action"><a href="/thuc-don.html" class="btn outline">XEM TOÀN BỘ THỰC ĐƠN <span aria-hidden="true">↗</span></a></div></div></section>
  <section class="section" style="padding-top:30px;padding-bottom:95px"><div class="container story"><div class="story-art"><img src="/assets/images/lau-hai-san.webp" alt="Set lẩu hải sản trong thực đơn RIEU VIỆT" loading="lazy"><img src="/assets/images/lau-rieu-550.webp" alt="Set lẩu riêu 550K trong thực đơn RIEU VIỆT" loading="lazy"></div><div class="story-copy"><div class="eyebrow">HƯƠNG VỊ ĐƯỢC GÌN GIỮ</div><h2>Ngồi bên nồi lẩu,<br>gần nhau hơn.</h2><div class="stroke"></div><p>Bữa ăn ngon không chỉ nằm ở món ăn mà còn ở khoảnh khắc mọi người cùng ngồi lại. RIEU VIỆT mang đến lựa chọn từ lẩu riêu, lẩu gà nấm, hải sản đến các món ăn kèm.</p><div class="quote">“Đậm đà hương Việt”</div><div class="story-actions"><a class="text-link" href="/thuc-don.html">Khám phá hương vị RIEU VIỆT <span aria-hidden="true">↗</span></a></div></div></div></section>
- <section class="section dark-feature"><div class="container"><div><div class="eyebrow gold">TỪ THỰC ĐƠN CỦA QUÁN</div><h2>Không chỉ có<br>lẩu riêu.</h2><p>Lẩu hải sản, lẩu gà nấm, bò Tứ Xuyên và nhiều món nhúng, món ăn kèm được thể hiện trong menu.</p><a class="btn light" href="/thuc-don.html" style="margin-top:22px">XEM MENU & BẢNG GIÁ</a></div><div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn Rieu Viet">
+ <section class="section dark-feature"><div class="container"><div><div class="eyebrow gold">TỪ THỰC ĐƠN CỦA QUÁN</div><h2>Không chỉ có<br>lẩu riêu.</h2><p>Lẩu hải sản, lẩu gà nấm, bò Tứ Xuyên và nhiều món nhúng, món ăn kèm được thể hiện trong menu.</p><a class="btn light" href="/thuc-don.html" style="margin-top:22px">XEM MENU & BẢNG GIÁ</a></div><div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn RIEU VIỆT">
   <div class="menu-book-stage">
     <div class="menu-book-spread">
       <div class="menu-book-page menu-book-page--left">
-        <img src="/assets/images/menu-page-01.webp" alt="Trang 1 trong thực đơn Rieu Viet" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
+        <img src="/assets/images/menu-page-01.webp" alt="Trang 1 trong thực đơn RIEU VIỆT" width="901" height="1680" loading="eager" decoding="async" draggable="false">
       </div>
       <div class="menu-book-page menu-book-page--right">
-        <img src="/assets/images/menu-page-02.webp" alt="Trang 2 trong thực đơn Rieu Viet" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
-        <span class="menu-book-end" aria-hidden="true">Rieu Viet</span>
+        <img src="/assets/images/menu-page-02.webp" alt="Trang 2 trong thực đơn RIEU VIỆT" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
+        <div class="menu-book-end" aria-hidden="true"><span class="menu-book-end-title">RIEU VIỆT</span><span class="menu-book-end-sub">Đậm đà hương Việt</span></div>
       </div>
       <div class="menu-book-flip" data-menu-flip aria-hidden="true">
         <div class="menu-book-flip-face menu-book-flip-front"><img alt="" width="901" height="1680" draggable="false"></div>
@@ -80,9 +93,12 @@ home='''<section class="hero"><div class="container hero-inner"><div class="hero
     </div>
   </div>
   <div class="menu-book-controls">
-    <button class="menu-book-btn" type="button" data-menu-prev disabled>Trang trước</button>
-    <p class="menu-book-counter" data-menu-counter aria-live="polite">Trang 1–2 / 15</p>
-    <button class="menu-book-btn" type="button" data-menu-next>Trang sau</button>
+    <button class="menu-book-btn" type="button" data-menu-prev disabled aria-label="Trang trước">Trang trước</button>
+    <p class="menu-book-counter" data-menu-counter aria-live="polite">Trang 1 / 15</p>
+    <button class="menu-book-btn" type="button" data-menu-next aria-label="Trang sau">Trang sau</button>
+  </div>
+  <div class="menu-book-fallback">
+    <a class="text-link" href="/thuc-don.html#menu-goc" style="color:#f4cc98">Xem toàn bộ 15 trang thực đơn <span aria-hidden="true">↗</span></a>
   </div>
 </div></div></section>
  <section id="dat-ban" class="section reservation"><div class="container reservation-inner"><div><div class="eyebrow gold">LÊN LỊCH GẶP NHAU</div><h2>Hẹn nhau<br>bên nồi lẩu.</h2><p>Chuẩn bị thông tin đặt bàn để liên hệ nhà hàng. Yêu cầu chỉ được xác nhận khi có phản hồi trực tiếp từ quán.</p><div style="padding:22px 0"><b>Giờ phục vụ</b><p data-config="openingHours"></p><b>Liên hệ</b><p><a data-link="phone" href="/lien-he.html" style="color:#ffe0b6" data-config="phone"></a></p></div></div>
