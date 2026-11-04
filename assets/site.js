@@ -201,6 +201,192 @@
     }
   }
 
+  function initMenuBook() {
+    const book = $('[data-menu-book]');
+    if (!book) return;
+    const stage = $('.menu-book-stage', book);
+    const leftPage = $('.menu-book-page--left', book);
+    const rightPage = $('.menu-book-page--right', book);
+    const flip = $('[data-menu-flip]', book);
+    const flipFront = $('.menu-book-flip-front img', book);
+    const flipBack = $('.menu-book-flip-back img', book);
+    const counter = $('[data-menu-counter]', book);
+    const prevButton = $('[data-menu-prev]', book);
+    const nextButton = $('[data-menu-next]', book);
+    const singleQuery = window.matchMedia('(max-width: 900px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pagePromises = new Map();
+    const pages = Array.from({ length: 15 }, (_, index) => ({
+      src: `/assets/images/menu-page-${String(index + 1).padStart(2, '0')}.webp`,
+      alt: `Trang ${index + 1} trong thực đơn Rieu Viet`
+    }));
+    let current = 0;
+    let animating = false;
+    let swipeStart = null;
+
+    function setImage(img, page) {
+      if (!img) return;
+      if (!page) { img.removeAttribute('src'); img.alt = ''; return; }
+      if (img.getAttribute('src') !== page.src) img.src = page.src;
+      img.alt = page.alt;
+    }
+
+    function setPage(container, page) {
+      if (!container) return;
+      const image = $('img', container);
+      container.classList.toggle('is-blank', !page);
+      if (!image) return;
+      if (!page) { image.hidden = true; image.removeAttribute('src'); image.alt = ''; return; }
+      image.hidden = false;
+      if (image.getAttribute('src') !== page.src) image.src = page.src;
+      image.alt = page.alt;
+    }
+
+    function getSpread(index) {
+      if (singleQuery.matches) return [pages[index], null];
+      const start = index - index % 2;
+      return [pages[start], pages[start + 1] || null];
+    }
+
+    function preload(page) {
+      if (!page) return Promise.resolve();
+      if (!pagePromises.has(page.src)) {
+        pagePromises.set(page.src, new Promise(resolve => {
+          const image = new Image();
+          image.onload = resolve;
+          image.onerror = resolve;
+          image.src = page.src;
+        }));
+      }
+      return pagePromises.get(page.src);
+    }
+
+    function schedulePreload() {
+      const run = () => {
+        const start = current - current % 2;
+        const indexes = singleQuery.matches ? [current + 1, current + 2] : [start + 2, start + 3, start + 4];
+        indexes.forEach(index => { if (pages[index]) preload(pages[index]); });
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 1200 });
+      else setTimeout(run, 220);
+    }
+
+    function updateControls() {
+      if (prevButton) prevButton.disabled = animating || current === 0;
+      if (nextButton) nextButton.disabled = animating || current >= pages.length - 1;
+      if (!counter) return;
+      if (singleQuery.matches) {
+        counter.textContent = `Trang ${current + 1} / ${pages.length}`;
+        return;
+      }
+      const start = current - current % 2;
+      const end = Math.min(start + 1, pages.length - 1);
+      counter.textContent = start === end ? `Trang ${start + 1} / ${pages.length}` : `Trang ${start + 1}–${end + 1} / ${pages.length}`;
+    }
+
+    function renderPages() {
+      if (!singleQuery.matches) current -= current % 2;
+      const [left, right] = getSpread(current);
+      setPage(leftPage, left);
+      setPage(rightPage, right);
+      updateControls();
+      schedulePreload();
+    }
+
+    function flipTo(frontPage, backPage, direction, onFinish) {
+      return new Promise(resolve => {
+        if (!flip || !flipFront || !flipBack) { onFinish(); resolve(); return; }
+        setImage(flipFront, frontPage);
+        setImage(flipBack, backPage);
+        flip.classList.remove('is-next', 'is-prev', 'is-flipping', 'is-active');
+        flip.classList.add(direction === 'next' ? 'is-next' : 'is-prev');
+        void flip.offsetWidth;
+        flip.classList.add('is-active');
+        void flip.offsetWidth;
+        let finished = false;
+        const finish = () => {
+          if (finished) return;
+          finished = true;
+          flip.removeEventListener('animationend', handleEnd);
+          onFinish();
+          flip.classList.remove('is-active', 'is-flipping', 'is-next', 'is-prev');
+          resolve();
+        };
+        const handleEnd = event => { if (event.target === flip) finish(); };
+        flip.addEventListener('animationend', handleEnd);
+        requestAnimationFrame(() => { if (!finished) flip.classList.add('is-flipping'); });
+        setTimeout(finish, 900);
+      });
+    }
+
+    async function go(direction) {
+      if (animating) return;
+      const step = singleQuery.matches ? 1 : 2;
+      const target = direction === 'next' ? Math.min(current + step, pages.length - 1) : Math.max(current - step, 0);
+      if (target === current) return;
+      animating = true;
+      updateControls();
+      const single = singleQuery.matches;
+      const oldPages = getSpread(current);
+      const newPages = getSpread(target);
+      const frontPage = single ? oldPages[0] : (direction === 'next' ? oldPages[1] : oldPages[0]);
+      const backPage = single ? newPages[0] : (direction === 'next' ? newPages[0] : newPages[1]);
+      if (!frontPage || !backPage || reducedMotion.matches) {
+        current = target;
+        animating = false;
+        renderPages();
+        return;
+      }
+      await Promise.all([preload(frontPage), preload(backPage)]);
+      if (single) {
+        setPage(leftPage, newPages[0]);
+        setPage(rightPage, null);
+      } else if (direction === 'next') {
+        setPage(leftPage, oldPages[0]);
+        setPage(rightPage, newPages[1]);
+      } else {
+        setPage(leftPage, newPages[0]);
+        setPage(rightPage, oldPages[1]);
+      }
+      await flipTo(frontPage, backPage, direction, () => {
+        current = target;
+        renderPages();
+      });
+      animating = false;
+      updateControls();
+    }
+
+    const handleModeChange = () => {
+      if (animating) return;
+      if (!singleQuery.matches) current -= current % 2;
+      renderPages();
+    };
+    if (typeof singleQuery.addEventListener === 'function') singleQuery.addEventListener('change', handleModeChange);
+    else singleQuery.addListener(handleModeChange);
+
+    prevButton?.addEventListener('click', () => go('prev'));
+    nextButton?.addEventListener('click', () => go('next'));
+    book.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft') { event.preventDefault(); go('prev'); }
+      else if (event.key === 'ArrowRight') { event.preventDefault(); go('next'); }
+    });
+    if (stage) {
+      stage.addEventListener('pointerdown', event => {
+        if (animating || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+      });
+      stage.addEventListener('pointerup', event => {
+        if (!swipeStart || event.pointerId !== swipeStart.id) return;
+        const dx = event.clientX - swipeStart.x;
+        const dy = event.clientY - swipeStart.y;
+        swipeStart = null;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) go(dx < 0 ? 'next' : 'prev');
+      });
+      stage.addEventListener('pointercancel', () => { swipeStart = null; });
+    }
+    renderPages();
+  }
+
   // Event delegation for controls inserted dynamically.
   document.addEventListener('click', event => {
     const add = event.target.closest('[data-add]');
@@ -265,5 +451,5 @@
     closeCart();closeDialog();
     const nav=$('#mobile-menu');if(nav){nav.classList.remove('open');$('#mobile-toggle')?.setAttribute('aria-expanded','false');}
   });
-  renderConfig();renderFeatured();renderFilters();renderMenu();renderMenuPages();renderCart();
+  renderConfig();renderFeatured();renderFilters();renderMenu();renderMenuPages();renderCart();initMenuBook();
 })();

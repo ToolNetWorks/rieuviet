@@ -60,29 +60,8 @@ home='''<section class="hero"><div class="container hero-inner"><div class="hero
  <div class="intro-item"><span class="intro-icon">02</span><div><b>Thực đơn rõ giá</b><p>Tham khảo trực tiếp theo menu quán</p></div></div>
  <div class="intro-item"><span class="intro-icon">03</span><div><b>Đặt bàn dễ dàng</b><p>Chuẩn bị yêu cầu để liên hệ xác nhận</p></div></div>
  </div></section>
- <section class="section" id="mon-noi-bat"><div class="container"><div class="section-heading"><div class="eyebrow">GỢI Ý HÔM NAY</div><h2>Vị ngon làm nên cuộc hẹn</h2><p>Các set lẩu nổi bật từ thực đơn chính thức do nhà hàng cung cấp.</p></div>
- <div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn Rieu Viet">
-    <div class="menu-book-stage">
-      <div class="menu-book-spread">
-        <div class="menu-book-page menu-book-page--left">
-          <img src="/assets/images/menu-page-01.webp" alt="Trang 1 trong thực đơn Rieu Viet" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
-        </div>
-        <div class="menu-book-page menu-book-page--right">
-          <img src="/assets/images/menu-page-02.webp" alt="Trang 2 trong thực đơn RIEU VIỆT" width="901" height="1680" loading="lazy" decoding="async" draggable="false">
-          <span class="menu-book-end" aria-hidden="true">Rieu Viet</span>
-        </div>
-        <div class="menu-book-flip" data-menu-flip aria-hidden="true">
-          <div class="menu-book-flip-face menu-book-flip-front"><img alt="" width="901" height="1680" draggable="false"></div>
-          <div class="menu-book-flip-face menu-book-flip-back"><img alt="" width="901" height="1680" draggable="false"></div>
-        </div>
-      </div>
-    </div>
-    <div class="menu-book-controls">
-      <button class="menu-book-btn" type="button" data-menu-prev disabled>Trang trước</button>
-      <p class="menu-book-counter" data-menu-counter aria-live="polite">Trang 1–2 / 15</p>
-      <button class="menu-book-btn" type="button" data-menu-next>Trang sau</button>
-    </div>
-  </div></div></section>
+<section class="section" id="mon-noi-bat"><div class="container"><div class="section-heading"><div class="eyebrow">GỢI Ý HÔM NAY</div><h2>Vị ngon làm nên cuộc hẹn</h2><p>Các set lẩu nổi bật từ thực đơn chính thức do nhà hàng cung cấp.</p></div>
+<div class="featured-grid" id="featured-grid"></div><div class="center-action"><a href="/thuc-don.html" class="btn outline">XEM TOÀN BỘ THỰC ĐƠN <span aria-hidden="true">↗</span></a></div></div></section>
  <section class="section" style="padding-top:30px;padding-bottom:95px"><div class="container story"><div class="story-art"><img src="/assets/images/lau-hai-san.webp" alt="Set lẩu hải sản trong thực đơn RIEU VIỆT" loading="lazy"><img src="/assets/images/lau-rieu-550.webp" alt="Set lẩu riêu 550K trong thực đơn RIEU VIỆT" loading="lazy"></div><div class="story-copy"><div class="eyebrow">HƯƠNG VỊ ĐƯỢC GÌN GIỮ</div><h2>Ngồi bên nồi lẩu,<br>gần nhau hơn.</h2><div class="stroke"></div><p>Bữa ăn ngon không chỉ nằm ở món ăn mà còn ở khoảnh khắc mọi người cùng ngồi lại. RIEU VIỆT mang đến lựa chọn từ lẩu riêu, lẩu gà nấm, hải sản đến các món ăn kèm.</p><div class="quote">“Đậm đà hương Việt”</div><div class="story-actions"><a class="text-link" href="/thuc-don.html">Khám phá hương vị RIEU VIỆT <span aria-hidden="true">↗</span></a></div></div></div></section>
  <section class="section dark-feature"><div class="container"><div><div class="eyebrow gold">TỪ THỰC ĐƠN CỦA QUÁN</div><h2>Không chỉ có<br>lẩu riêu.</h2><p>Lẩu hải sản, lẩu gà nấm, bò Tứ Xuyên và nhiều món nhúng, món ăn kèm được thể hiện trong menu.</p><a class="btn light" href="/thuc-don.html" style="margin-top:22px">XEM MENU & BẢNG GIÁ</a></div><div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn Rieu Viet">
   <div class="menu-book-stage">
