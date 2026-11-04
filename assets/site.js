@@ -214,7 +214,7 @@
     const counter = $('[data-menu-counter]', book);
     const prevButton = $('[data-menu-prev]', book);
     const nextButton = $('[data-menu-next]', book);
-    const singleQuery = window.matchMedia('(max-width: 900px)');
+    const singleQuery = window.matchMedia('(max-width: 640px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const pagePromises = new Map();
     const pages = Array.from({ length: 15 }, (_, index) => ({
@@ -405,6 +405,16 @@
 
     prevButton?.addEventListener('click', () => go('prev'));
     nextButton?.addEventListener('click', () => go('next'));
+    leftPage?.addEventListener('click', event => {
+      if (singleQuery.matches || animating) return;
+      if (event.target.closest('a, button')) return;
+      go('prev');
+    });
+    rightPage?.addEventListener('click', event => {
+      if (singleQuery.matches || animating) return;
+      if (event.target.closest('a, button')) return;
+      go('next');
+    });
     book.addEventListener('keydown', event => {
       if (event.key === 'ArrowLeft') { event.preventDefault(); go('prev'); }
       else if (event.key === 'ArrowRight') { event.preventDefault(); go('next'); }
@@ -498,16 +508,26 @@
   }
   const floatCart = $('#float-cart-count')?.closest('.float-cart');
   const bookingBox = $('#dat-ban .reservation-box');
-  if (floatCart && bookingBox && 'IntersectionObserver' in window) {
+  const menuBook = $('[data-menu-book]');
+  if (floatCart && 'IntersectionObserver' in window) {
     const setFloatCartHidden = hidden => {
       floatCart.classList.toggle('is-hidden', hidden);
       floatCart.setAttribute('aria-hidden', String(hidden));
       floatCart.tabIndex = hidden ? -1 : 0;
       if (hidden && document.activeElement === floatCart) floatCart.blur();
     };
-    new IntersectionObserver(entries => {
-      setFloatCartHidden(entries.some(entry => entry.isIntersecting));
-    }, { threshold: 0.01 }).observe(bookingBox);
+    const targets = [bookingBox, menuBook].filter(Boolean);
+    if (targets.length) {
+      const intersecting = new Set();
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) intersecting.add(entry.target);
+          else intersecting.delete(entry.target);
+        });
+        setFloatCartHidden(intersecting.size > 0);
+      }, { threshold: 0.01 });
+      targets.forEach(t => observer.observe(t));
+    }
   }
   document.addEventListener('keydown',event=>{
     if (event.key !== 'Escape') return;
