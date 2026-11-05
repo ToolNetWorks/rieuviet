@@ -26,6 +26,15 @@ export function setActiveCategory(category) {
   renderMenu();
 }
 
+const FEATURED_DESCRIPTIONS = {
+  lr350: 'Set lẩu riêu cua đồng thanh ngọt, sườn sụn tươi giòn cùng đồ nhúng hấp dẫn cho 2–3 người.',
+  lr450: 'Set lẩu riêu cua bắp bò, sườn sụn đậm đà chuẩn vị truyền thống cho 3–4 người.',
+  lr550: 'Set lẩu riêu cua đặc biệt đầy đặn với đa dạng đồ nhúng thượng hạng cho 4–6 người.',
+  lgn490: 'Nước dùng gà ta thanh ngọt tự nhiên kết hợp cùng các loại nấm tươi bổ dưỡng.',
+  lhs500: 'Hải sản tươi ngon hòa quyện cùng nước lẩu chua cay đậm đà tròn vị.',
+  lnc520: 'Thịt chim câu bổ dưỡng hầm cùng nấm tươi thơm ngọt, vị thanh nhẹ ấm lòng.'
+};
+
 export function renderFeatured() {
   const root = $('#featured-grid');
   if (!root) return;
@@ -43,7 +52,7 @@ export function renderFeatured() {
         </div>
         <div class="food-content">
           <h3>${escapeHtml(item.name)}</h3>
-          <p class="food-detail">Hình ảnh và giá tham khảo theo thực đơn của nhà hàng. Vui lòng xác nhận khi gọi món.</p>
+          <p class="food-detail">${escapeHtml(FEATURED_DESCRIPTIONS[item.id] || 'Món ngon chế biến từ nguyên liệu tươi ngon theo công thức đặc trưng của RIEU VIỆT.')}</p>
           <div class="food-bottom">
             <span class="price">${formatMoney(item.price)}</span>
             <button class="add-btn" aria-label="Thêm ${escapeHtml(item.name)}" data-add="${item.id}" title="Thêm vào danh sách món">+</button>

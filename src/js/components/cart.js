@@ -77,7 +77,7 @@ export function renderCart() {
         </div>
         <span class="price">${formatMoney(item.price * cart[item.id])}</span>
       </div>`).join('')
-    : '<div class="cart-empty"><p>Chưa có món nào được chọn.</p><a class="btn outline small" href="/thuc-don">Xem thực đơn</a></div>';
+    : '<div class="cart-empty"><p>Chưa có món nào được chọn.</p><a class="btn outline small" href="/thuc-don.html">Xem thực đơn</a></div>';
 
   const subtotal = $('#cart-total');
   if (subtotal) subtotal.textContent = formatMoney(total());

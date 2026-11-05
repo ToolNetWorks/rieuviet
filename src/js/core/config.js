@@ -12,7 +12,7 @@ export function renderConfig() {
   const label = (value, fallback) => (value?.trim() ? value.trim() : fallback);
 
   $$('[data-config="address"]').forEach(node => {
-    node.textContent = label(cfg.address, 'Đang cập nhật địa chỉ quán');
+    node.textContent = label(cfg.address, 'Số 01 Hàn Mạc Tử, Phường Kinh Bắc, Bắc Ninh, Việt Nam');
   });
 
   $$('[data-config="phone"]').forEach(node => {
@@ -22,7 +22,7 @@ export function renderConfig() {
       const p2 = cfg.phone2 ? `<a href="tel:${cfg.phone2.replace(/[^\d+]/g, '')}">${cfg.phone2.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}</a>` : '';
       node.innerHTML = [p1, p2].filter(Boolean).join(' · ');
     } else {
-      node.textContent = label(display, 'Đang cập nhật số điện thoại');
+      node.textContent = label(display, '0859 433 333 · 0814 133 333');
     }
   });
 
@@ -30,20 +30,20 @@ export function renderConfig() {
     if (node.tagName.toLowerCase() === 'span' && cfg.email?.trim()) {
       node.innerHTML = `<a href="mailto:${cfg.email.trim()}">${cfg.email.trim()}</a>`;
     } else {
-      node.textContent = label(cfg.email, 'Đang cập nhật email liên hệ');
+      node.textContent = label(cfg.email, 'marketing.rieuviet@gmail.com');
     }
   });
 
   $$('[data-config="openingHours"]').forEach(node => {
-    node.textContent = label(cfg.openingHours, 'Vui lòng liên hệ quán để xác nhận giờ phục vụ');
+    node.textContent = label(cfg.openingHours, '10:00 – 22:30, tất cả các ngày');
   });
 
   $$('[data-config="legalName"]').forEach(node => {
-    node.textContent = label(cfg.legalName, 'Chưa cập nhật đơn vị kinh doanh');
+    node.textContent = label(cfg.legalName, 'CÔNG TY CỔ PHẦN DỊCH VỤ THƯƠNG MẠI RIÊU VIỆT');
   });
 
   $$('[data-config="taxCode"]').forEach(node => {
-    node.textContent = label(cfg.taxCode, 'Chưa cập nhật mã số thuế');
+    node.textContent = label(cfg.taxCode, '2300954297');
   });
 
   $$('[data-link="phone"]').forEach(node => {
@@ -69,7 +69,7 @@ export function renderConfig() {
   $$('[data-config="onlinePayment"]').forEach(node => {
     node.textContent = cfg.onlinePaymentEnabled
       ? 'Thanh toán trực tuyến theo phương thức đang được kích hoạt'
-      : 'Thanh toán trực tuyến bằng thẻ đang chờ kích hoạt. Không yêu cầu nhập dữ liệu thẻ trên website này.';
+      : 'Hiện tại RIEU VIỆT phục vụ và thanh toán trực tiếp tại nhà hàng khi quý khách dùng bữa.';
   });
 
   // Inject Schema.org Restaurant

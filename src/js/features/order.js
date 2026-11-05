@@ -57,9 +57,9 @@ function buildOrderMessage(data) {
       lines.push(`- ${item.name} × ${cart[item.id]}: ${formatMoney(item.price * cart[item.id])}`);
     });
 
-  lines.push(`Tổng giá menu (chưa xác nhận): ${formatMoney(total())}`);
+  lines.push(`Tổng giá tham khảo theo menu: ${formatMoney(total())}`);
   if (data.note) lines.push(`Ghi chú: ${data.note}`);
-  lines.push('Vui lòng xác nhận lại với nhà hàng. Đây chưa phải xác nhận đặt bàn/đặt món.');
+  lines.push('Nhà hàng RIEU VIỆT sẽ liên hệ xác nhận danh sách món với quý khách.');
   return lines.join('\n');
 }
 
@@ -69,7 +69,7 @@ async function copyOrderMessage(message, outputSelector) {
     await copyTextToClipboard(message);
     toast('Đã sao chép nội dung yêu cầu');
     if (node) {
-      node.textContent = 'Đã sao chép. Hãy gửi cho nhà hàng qua số điện thoại hoặc kênh liên hệ chính thức.';
+      node.textContent = 'Đã tạo danh sách món. Quý khách vui lòng liên hệ hotline 0859 433 333 để được phục vụ nhanh nhất.';
     }
   } catch {
     if (node) node.textContent = message;
