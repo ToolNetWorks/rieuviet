@@ -129,16 +129,6 @@
   font-size: 19px;
 }
 
-.menu-note {
-  border-left: 3px solid #bca47f;
-  background: #fff;
-  max-width: 800px;
-  padding: 15px 20px;
-  color: #685d53;
-  font-size: 11px;
-  margin: 0 0 25px;
-}
-
 .empty-results {
   grid-column: 1 / -1;
   text-align: center;

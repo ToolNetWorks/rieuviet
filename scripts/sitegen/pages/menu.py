@@ -32,7 +32,7 @@ def get_menu_content():
     )
     body = (
         '<section class="menu-tools"><div class="container"><div class="menu-tool-row"><div class="search-box"><span aria-hidden="true">⌕</span><input id="menu-search" type="search" autocomplete="off" aria-label="Tìm kiếm món ăn" placeholder="Tìm tên món, ví dụ: lẩu riêu, tôm, bò..."></div><div style="display:flex;gap:10px;align-items:center"><small class="muted" id="menu-result-count"></small><a class="text-link" href="#menu-goc">Xem menu gốc ↘</a></div></div><div id="category-list" class="category-list" aria-label="Lọc món theo nhóm"></div></div></section>\n'
-        '<section class="section-sm"><div class="container"><div class="menu-note"><b>Lưu ý về giá:</b> Giá được nhập từ thực đơn PDF của quán; nếu có thay đổi, nhân viên sẽ xác nhận lại trước khi phục vụ. Các món trong danh sách dùng để chuẩn bị yêu cầu đặt món, không phải đơn hàng đã được xác nhận hoặc thanh toán.</div><div id="menu-list" class="menu-list" aria-live="polite"></div></div></section>\n'
+        '<section class="section-sm"><div class="container"><div id="menu-list" class="menu-list" aria-live="polite"></div></div></section>\n'
         + book_section
     )
     return hero + body
