@@ -15,8 +15,7 @@ def get_about_content():
         '<img src="/assets/images/lau-rieu-550.webp" alt="Set lẩu riêu Việt 550K" loading="lazy">'
         '</div><div class="story-copy"><div class="eyebrow">RIEU VIỆT · ĐẬM ĐÀ HƯƠNG VIỆT</div>'
         '<h2>Hương vị gắn kết<br>mỗi cuộc gặp.</h2><div class="stroke"></div>'
-        '<p>RIEU VIỆT giới thiệu các set lẩu riêu, lẩu gà nấm, lẩu hải sản, lẩu bò Tứ Xuyên, lẩu cá và các món nhúng, món ăn kèm theo thực đơn hiện có của quán.</p>'
-        '<p>Website giúp thực khách xem trước món ăn, giá tham khảo và chuẩn bị nội dung đặt bàn trước khi liên hệ nhà hàng xác nhận.</p>'
+        '<p>RIEU VIỆT mang đến các set lẩu riêu đậm đà, lẩu gà nấm, lẩu hải sản, lẩu bò Tứ Xuyên và nhiều món nhúng, món ăn kèm đặc sắc cho những dịp sum họp trọn vẹn niềm vui.</p>'
         '<a href="/thuc-don.html" class="btn outline">KHÁM PHÁ THỰC ĐƠN</a></div></div></section>'
     )
     return hero + body

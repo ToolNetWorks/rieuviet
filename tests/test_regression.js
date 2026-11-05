@@ -514,6 +514,198 @@ async function run() {
   }
   await contactP.close();
 
+  // ========================================
+  // Testing Footer Typography & Responsive Layout across Viewports
+  // ========================================
+  console.log(`\n========================================\nTesting Footer Typography across Viewports\n========================================`);
+
+  const footerViewports = [
+    { name: 'iPhone 14 (390x844)', width: 390, height: 844, isMobile: true, expectedColumns: 1 },
+    { name: 'iPhone 14 Pro Max (430x932)', width: 430, height: 932, isMobile: true, expectedColumns: 1 },
+    { name: 'iPad Mini / Air (768x1024)', width: 768, height: 1024, isMobile: false, expectedColumns: 2 },
+    { name: 'iPad Pro (1024x1366)', width: 1024, height: 1366, isMobile: false, expectedColumns: 4 },
+    { name: 'Desktop (1440x900)', width: 1440, height: 900, isMobile: false, expectedColumns: 4 }
+  ];
+
+  for (const vp of footerViewports) {
+    const page = await browser.newPage();
+    await page.setViewport({ width: vp.width, height: vp.height, isMobile: vp.isMobile });
+    await page.goto(`${baseUrl}/index.html`, { waitUntil: 'domcontentloaded' });
+    await sleep(200);
+
+    const footerData = await page.evaluate(() => {
+      const footer = document.querySelector('.footer');
+      if (!footer) return null;
+
+      const htmlStyle = window.getComputedStyle(document.documentElement);
+      const textSizeAdjust = htmlStyle.webkitTextSizeAdjust || htmlStyle.textSizeAdjust;
+
+      const headings = Array.from(footer.querySelectorAll('.footer-main h4')).map(h => {
+        const s = window.getComputedStyle(h);
+        return { text: h.innerText.trim(), fontSize: parseFloat(s.fontSize), fontWeight: s.fontWeight, fontFamily: s.fontFamily, lineHeight: s.lineHeight };
+      });
+
+      const links = Array.from(footer.querySelectorAll('.footer-main ul li a')).map(a => {
+        const s = window.getComputedStyle(a);
+        return { text: a.innerText.trim(), fontSize: parseFloat(s.fontSize), fontWeight: s.fontWeight, fontFamily: s.fontFamily };
+      });
+
+      const paragraphs = Array.from(footer.querySelectorAll('.footer p')).map(p => {
+        const s = window.getComputedStyle(p);
+        return { text: p.innerText.trim(), fontSize: parseFloat(s.fontSize), fontWeight: s.fontWeight, fontFamily: s.fontFamily };
+      });
+
+      const legalDivs = Array.from(footer.querySelectorAll('.legal-info div')).map(d => {
+        const s = window.getComputedStyle(d);
+        return { fontSize: parseFloat(s.fontSize), fontWeight: s.fontWeight, fontFamily: s.fontFamily };
+      });
+
+      const legalLabels = Array.from(footer.querySelectorAll('.legal-info b')).map(b => {
+        const s = window.getComputedStyle(b);
+        return { text: b.innerText.trim(), fontSize: parseFloat(s.fontSize), fontWeight: s.fontWeight, fontFamily: s.fontFamily };
+      });
+
+      const websiteLink = footer.querySelector('a[href*="rieuviet.vn"]');
+      const websiteLinkStyle = websiteLink ? window.getComputedStyle(websiteLink) : null;
+
+      const footerMain = footer.querySelector('.footer-main');
+      const footerMainStyle = window.getComputedStyle(footerMain);
+      const gridColTemplates = footerMainStyle.gridTemplateColumns ? footerMainStyle.gridTemplateColumns.trim().split(/\s+/).length : 0;
+
+      const hasOverflow = document.documentElement.scrollWidth > window.innerWidth;
+
+      // Check legal content values
+      const legalText = footer.querySelector('.legal-info') ? footer.querySelector('.legal-info').innerText : '';
+
+      return {
+        textSizeAdjust,
+        headings,
+        links,
+        paragraphs,
+        legalDivs,
+        legalLabels,
+        websiteFontSize: websiteLinkStyle ? parseFloat(websiteLinkStyle.fontSize) : null,
+        gridColTemplates,
+        hasOverflow,
+        scrollWidth: document.documentElement.scrollWidth,
+        viewportWidth: window.innerWidth,
+        legalText
+      };
+    });
+
+    console.log(`\n  Checking Footer at ${vp.name}:`);
+    if (!footerData) {
+      console.error(`  FAIL: Footer element not found!`);
+      allPassed = false;
+      await page.close();
+      continue;
+    }
+
+    if (footerData.hasOverflow) {
+      console.error(`  FAIL: Horizontal overflow detected! scrollWidth=${footerData.scrollWidth} > innerWidth=${footerData.viewportWidth}`);
+      allPassed = false;
+    } else {
+      console.log(`  ✔ No horizontal overflow`);
+    }
+
+    // Check text-size-adjust
+    if (footerData.textSizeAdjust && footerData.textSizeAdjust !== '100%' && footerData.textSizeAdjust !== 'none') {
+      console.error(`  FAIL: Unexpected text-size-adjust: ${footerData.textSizeAdjust}`);
+      allPassed = false;
+    } else {
+      console.log(`  ✔ text-size-adjust correctly set: ${footerData.textSizeAdjust}`);
+    }
+
+    // Check headings (15-16px, weight 700, Be Vietnam Pro)
+    let headingsOk = true;
+    for (const h of footerData.headings) {
+      if (h.fontSize < 14.9 || h.fontSize > 16.1) {
+        console.error(`  FAIL: Heading "${h.text}" font-size is ${h.fontSize}px (expected 15-16px)`);
+        headingsOk = false;
+      }
+      if (parseInt(h.fontWeight) < 700) {
+        console.error(`  FAIL: Heading "${h.text}" font-weight is ${h.fontWeight} (expected >= 700)`);
+        headingsOk = false;
+      }
+      if (!h.fontFamily.toLowerCase().includes('vietnam')) {
+        console.error(`  FAIL: Heading "${h.text}" font-family is ${h.fontFamily} (expected Be Vietnam Pro)`);
+        headingsOk = false;
+      }
+    }
+    if (headingsOk) console.log(`  ✔ All ${footerData.headings.length} group headings: 15–16px, font-weight 700, Be Vietnam Pro`);
+    else allPassed = false;
+
+    // Check links & content (13-14px)
+    let contentOk = true;
+    for (const l of footerData.links) {
+      if (l.fontSize < 13.0 || l.fontSize > 14.1) {
+        console.error(`  FAIL: Link "${l.text}" font-size is ${l.fontSize}px (expected 13-14px)`);
+        contentOk = false;
+      }
+    }
+    for (const p of footerData.paragraphs) {
+      if (p.fontSize < 13.0 || p.fontSize > 14.1) {
+        console.error(`  FAIL: Paragraph font-size is ${p.fontSize}px (expected 13-14px)`);
+        contentOk = false;
+      }
+    }
+    for (const d of footerData.legalDivs) {
+      if (d.fontSize < 13.0 || d.fontSize > 14.1) {
+        console.error(`  FAIL: Legal div font-size is ${d.fontSize}px (expected 13-14px)`);
+        contentOk = false;
+      }
+    }
+    if (footerData.websiteFontSize < 13.0 || footerData.websiteFontSize > 14.1) {
+      console.error(`  FAIL: Website link font-size is ${footerData.websiteFontSize}px (expected 13-14px)`);
+      contentOk = false;
+    }
+    if (contentOk) console.log(`  ✔ Content, links, legal items & website link unified at 13–14px`);
+    else allPassed = false;
+
+    // Check legal labels (b tags: 600-700, same font-size as text)
+    let labelsOk = true;
+    for (const b of footerData.legalLabels) {
+      if (b.fontSize < 13.0 || b.fontSize > 14.1) {
+        console.error(`  FAIL: Legal label "${b.text}" font-size is ${b.fontSize}px (expected 13-14px)`);
+        labelsOk = false;
+      }
+      if (parseInt(b.fontWeight) < 600) {
+        console.error(`  FAIL: Legal label "${b.text}" font-weight is ${b.fontWeight} (expected >= 600)`);
+        labelsOk = false;
+      }
+    }
+    if (labelsOk) console.log(`  ✔ Legal labels: font-weight 600–700, same font-size as values (13.5px)`);
+    else allPassed = false;
+
+    // Check grid columns
+    if (footerData.gridColTemplates !== vp.expectedColumns) {
+      console.error(`  FAIL: Expected ${vp.expectedColumns} columns in footer-main, got ${footerData.gridColTemplates}`);
+      allPassed = false;
+    } else {
+      console.log(`  ✔ Layout grid has expected ${vp.expectedColumns} columns`);
+    }
+
+    // Check legal text preservation
+    const requiredStrings = [
+      'CÔNG TY CỔ PHẦN DỊCH VỤ THƯƠNG MẠI RIÊU VIỆT',
+      '2300954297',
+      '0859 433 333',
+      '0814 133 333',
+      'marketing.rieuviet@gmail.com'
+    ];
+    let legalOk = true;
+    for (const str of requiredStrings) {
+      if (!footerData.legalText.includes(str)) {
+        console.error(`  FAIL: Missing required legal text "${str}"`);
+        legalOk = false;
+      }
+    }
+    if (legalOk) console.log(`  ✔ All business and legal information preserved intact`);
+    else allPassed = false;
+
+    await page.close();
+  }
+
   await browser.close();
   server.close();
 

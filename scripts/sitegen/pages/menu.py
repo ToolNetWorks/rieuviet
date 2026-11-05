@@ -7,7 +7,7 @@ def get_menu_content():
     hero = pagehero(
         'THỰC ĐƠN RIEU VIỆT',
         'Chọn món trọn vị',
-        'Tìm nhanh món yêu thích, xem giá theo menu gốc và chuẩn bị danh sách món trước khi liên hệ với quán.'
+        'Tìm nhanh món yêu thích, xem thực đơn phong phú cùng bảng giá chính thức của RIEU VIỆT.'
     )
     fallback = (
         '<div style="display:flex;gap:22px;justify-content:center;align-items:center;flex-wrap:wrap">\n'
@@ -21,7 +21,6 @@ def get_menu_content():
         '<div>'
         '<div class="eyebrow gold">THỰC ĐƠN NHÀ HÀNG</div>'
         '<h2>Xem menu gốc<br>15 trang.</h2>'
-        '<p>Hình ảnh từng trang lấy trực tiếp từ tài liệu thực đơn chính thức do RIEU VIỆT cung cấp. Chạm hoặc vuốt để lật trang, nhấn vào trang để phóng to chi tiết.</p>'
         '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">'
         '<a class="btn light" href="/thuc-don-rieu-viet.pdf" download>TẢI THỰC ĐƠN PDF</a>'
         '<button class="btn outline" type="button" data-open-zoom-all>XEM TOÀN BỘ 15 TRANG</button>'
