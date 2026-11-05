@@ -279,6 +279,13 @@ export function initMenuBook() {
   bindZoomTrigger(leftPage, false);
   bindZoomTrigger(rightPage, true);
 
+  $$('[data-open-zoom-all]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const spreadStart = current - (current % 2);
+      openZoom(spreadStart);
+    });
+  });
+
   // Initialize lightbox with callback to sync current spread when closed
   initZoom(pages, preload, newIndex => {
     current = newIndex;

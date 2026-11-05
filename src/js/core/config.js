@@ -61,11 +61,9 @@ export function renderConfig() {
   });
 
   $$('[data-link="map"]').forEach(node => {
-    node.href = cfg.mapUrl?.trim() || '/lien-he.html';
-    if (cfg.mapUrl?.trim()) {
-      node.target = '_blank';
-      node.rel = 'noopener';
-    }
+    node.href = cfg.mapUrl?.trim() || 'https://share.google/Sk8WSTpvcjp1EKxP2';
+    node.target = '_blank';
+    node.rel = 'noopener noreferrer';
   });
 
   $$('[data-config="onlinePayment"]').forEach(node => {

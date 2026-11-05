@@ -1,7 +1,7 @@
 """
 Menu and price list page content template.
 """
-from ..templates import pagehero
+from ..templates import pagehero, menu_book
 
 def get_menu_content():
     hero = pagehero(
@@ -9,9 +9,30 @@ def get_menu_content():
         'Chọn món trọn vị',
         'Tìm nhanh món yêu thích, xem giá theo menu gốc và chuẩn bị danh sách món trước khi liên hệ với quán.'
     )
+    fallback = (
+        '<div style="display:flex;gap:22px;justify-content:center;align-items:center;flex-wrap:wrap">\n'
+        '       <a class="text-link" href="/thuc-don-rieu-viet.pdf" download style="color:#f4cc98">Tải thực đơn PDF <span aria-hidden="true">↓</span></a>\n'
+        '       <button type="button" class="text-link" data-open-zoom-all style="color:#f4cc98;background:none;border:none;cursor:pointer;font-size:inherit;font-family:inherit;padding:0;text-decoration:underline;text-underline-offset:4px">Xem toàn bộ 15 trang thực đơn <span aria-hidden="true">↗</span></button>\n'
+        '     </div>'
+    )
+    book_section = (
+        '<section class="section dark-feature" id="menu-goc">'
+        '<div class="container">'
+        '<div>'
+        '<div class="eyebrow gold">THỰC ĐƠN NHÀ HÀNG</div>'
+        '<h2>Xem menu gốc<br>15 trang.</h2>'
+        '<p>Hình ảnh từng trang lấy trực tiếp từ tài liệu thực đơn chính thức do RIEU VIỆT cung cấp. Chạm hoặc vuốt để lật trang, nhấn vào trang để phóng to chi tiết.</p>'
+        '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">'
+        '<a class="btn light" href="/thuc-don-rieu-viet.pdf" download>TẢI THỰC ĐƠN PDF</a>'
+        '<button class="btn outline" type="button" data-open-zoom-all>XEM TOÀN BỘ 15 TRANG</button>'
+        '</div>'
+        '</div>\n'
+        + menu_book(fallback_html=fallback)
+        + '</div></section>'
+    )
     body = (
         '<section class="menu-tools"><div class="container"><div class="menu-tool-row"><div class="search-box"><span aria-hidden="true">⌕</span><input id="menu-search" type="search" autocomplete="off" aria-label="Tìm kiếm món ăn" placeholder="Tìm tên món, ví dụ: lẩu riêu, tôm, bò..."></div><div style="display:flex;gap:10px;align-items:center"><small class="muted" id="menu-result-count"></small><a class="text-link" href="#menu-goc">Xem menu gốc ↘</a></div></div><div id="category-list" class="category-list" aria-label="Lọc món theo nhóm"></div></div></section>\n'
         '<section class="section-sm"><div class="container"><div class="menu-note"><b>Lưu ý về giá:</b> Giá được nhập từ thực đơn PDF của quán; nếu có thay đổi, nhân viên sẽ xác nhận lại trước khi phục vụ. Các món trong danh sách dùng để chuẩn bị yêu cầu đặt món, không phải đơn hàng đã được xác nhận hoặc thanh toán.</div><div id="menu-list" class="menu-list" aria-live="polite"></div></div></section>\n'
-        '<section class="section" id="menu-goc" style="background:#ede5d8"><div class="container"><div class="section-heading"><div class="eyebrow">THỰC ĐƠN NHÀ HÀNG</div><h2>Xem menu gốc 15 trang</h2><p>Hình ảnh từng trang lấy trực tiếp từ tài liệu thực đơn do nhà hàng cung cấp.</p><a class="btn outline" href="/thuc-don-rieu-viet.pdf" download style="margin-top:18px">TẢI THỰC ĐƠN PDF</a></div><div id="menu-pages" class="menu-pages"></div></div></section>'
+        + book_section
     )
     return hero + body

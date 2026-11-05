@@ -447,3 +447,20 @@
     letter-spacing: 0.05em;
   }
 }
+
+.dark-feature .btn.outline {
+  background: transparent;
+  color: #f7eedb;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.dark-feature .btn.outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+
+#menu-goc {
+  scroll-margin-top: calc(var(--header-height) + 20px);
+}

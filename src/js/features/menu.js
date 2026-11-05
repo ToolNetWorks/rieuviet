@@ -1,5 +1,6 @@
 /**
- * Menu listing, search, category filters, and 15-page thumbnails
+ * Menu listing, search, and category filters.
+ * (15-page original menu is rendered via the shared Flipbook component)
  */
 import { $, formatMoney, escapeHtml } from '../core/utils.js';
 import { getMenu, getCategories } from '../core/config.js';
@@ -11,7 +12,6 @@ export function initMenuFeatures() {
   renderFeatured();
   renderFilters();
   renderMenu();
-  renderMenuPages();
 
   const searchInput = $('#menu-search');
   searchInput?.addEventListener('input', event => {
@@ -100,18 +100,4 @@ export function renderMenu() {
 
   const node = $('#menu-result-count');
   if (node) node.textContent = `${filtered.length} món`;
-}
-
-export function renderMenuPages() {
-  const root = $('#menu-pages');
-  if (!root) return;
-
-  root.innerHTML = Array.from({ length: 15 }, (_, i) => {
-    const no = String(i + 1).padStart(2, '0');
-    return `
-      <a class="menu-page" href="/assets/images/menu-page-${no}.webp" target="_blank" rel="noopener" aria-label="Mở trang ${i + 1} của thực đơn">
-        <img src="/assets/images/menu-page-${no}.webp" alt="Trang ${i + 1} của thực đơn RIEU VIỆT" loading="lazy" width="901" height="1680">
-        <span>Trang ${i + 1}</span>
-      </a>`;
-  }).join('');
 }

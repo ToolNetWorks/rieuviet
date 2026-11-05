@@ -265,110 +265,254 @@ async function run() {
   }
   await menuPage.close();
 
-  // 8. Test /thuc-don.html 15 Original Menu Pages across Viewports
+  // 8. Test /thuc-don.html Flipbook Menu across Viewports
   console.log(`\n========================================`);
-  console.log(`Testing 15 Original Menu Pages Layout (/thuc-don.html)`);
+  console.log(`Testing Flipbook Menu on /thuc-don.html across Viewports`);
   console.log(`========================================`);
   const menuViewports = [
-    { name: 'Desktop 1440px', width: 1440, height: 900, expectedCols: [3, 4] },
-    { name: 'Tablet 1024px', width: 1024, height: 1366, expectedCols: [2, 3] },
-    { name: 'Tablet 768px', width: 768, height: 1024, expectedCols: [2, 3] },
-    { name: 'Mobile 390px', width: 390, height: 844, expectedCols: 2 }
+    { name: 'Mobile 390px', width: 390, height: 844, isMobile: true, minBookW: 330, maxBookW: 360 },
+    { name: 'Tablet 768px (iPad)', width: 768, height: 1024, isMobile: false, minBookW: 650, maxBookW: 730 },
+    { name: 'Tablet 820px (iPad Air)', width: 820, height: 1180, isMobile: false, minBookW: 700, maxBookW: 780 },
+    { name: 'Tablet 1024px (iPad Pro)', width: 1024, height: 1366, isMobile: false, minBookW: 850, maxBookW: 950 },
+    { name: 'Desktop 1440px', width: 1440, height: 900, isMobile: false, minBookW: 950, maxBookW: 1100 }
   ];
 
   for (const vp of menuViewports) {
+    console.log(`\n  Checking /thuc-don.html at ${vp.name} (${vp.width}x${vp.height}):`);
     const p = await browser.newPage();
-    await p.setViewport({ width: vp.width, height: vp.height });
+    const consoleErrs = [];
+    p.on('console', msg => { if (msg.type() === 'error') consoleErrs.push(msg.text()); });
+    p.on('pageerror', err => consoleErrs.push(err.message));
+
+    await p.setViewport({ width: vp.width, height: vp.height, isMobile: vp.isMobile, hasTouch: vp.isMobile });
     await p.goto(`${baseUrl}/thuc-don.html`, { waitUntil: 'networkidle0' });
 
-    const cardInfo = await p.evaluate(() => {
-      const cards = Array.from(document.querySelectorAll('#menu-pages .menu-page'));
-      if (cards.length === 0) return { count: 0 };
+    if (consoleErrs.length > 0) {
+      console.error(`  FAIL: Console errors on ${vp.name}:`, consoleErrs);
+      allPassed = false;
+    } else {
+      console.log(`    ✔ No console errors`);
+    }
 
-      const firstCard = cards[0];
-      const firstImg = firstCard.querySelector('img');
-      const firstRect = firstCard.getBoundingClientRect();
-      const imgRect = firstImg ? firstImg.getBoundingClientRect() : null;
-      const imgBg = firstImg ? window.getComputedStyle(firstImg).backgroundColor : '';
+    const overflow = await p.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    if (overflow) {
+      console.error(`  FAIL: Horizontal overflow detected on ${vp.name}`);
+      allPassed = false;
+    } else {
+      console.log(`    ✔ No horizontal overflow`);
+    }
 
-      // Determine number of columns by counting cards on the same Y position
-      const firstY = Math.round(firstRect.top);
-      const rowCols = cards.filter(c => Math.abs(Math.round(c.getBoundingClientRect().top) - firstY) < 5).length;
+    // Scroll to flipbook section
+    await p.evaluate(() => {
+      const el = document.querySelector('#menu-goc [data-menu-book]');
+      if (el) el.scrollIntoView({ behavior: 'instant', block: 'center' });
+    });
+    await sleep(200);
 
-      const hasYellowBg = imgBg.includes('230, 201, 149') || imgBg.includes('e6c995');
-      const overflow = document.documentElement.scrollWidth > window.innerWidth;
+    const metrics = await p.evaluate(() => {
+      const section = document.querySelector('#menu-goc');
+      const book = section ? section.querySelector('[data-menu-book]') : null;
+      const container = section ? section.querySelector('.container') : null;
+      const spread = book ? book.querySelector('.menu-book-spread') : null;
+      const leftPage = book ? book.querySelector('.menu-book-page--left') : null;
+      const rightPage = book ? book.querySelector('.menu-book-page--right') : null;
+      const counter = book ? book.querySelector('[data-menu-counter]') : null;
+      const pdfLink = section ? section.querySelector('a[href="/thuc-don-rieu-viet.pdf"]') : null;
+      const zoomAllBtn = section ? section.querySelector('[data-open-zoom-all]') : null;
+
+      if (!book || !container || !spread) {
+        return { exists: false };
+      }
+
+      const bookRect = book.getBoundingClientRect();
+      const contRect = container.getBoundingClientRect();
+      const spreadRect = spread.getBoundingClientRect();
+
+      const leftStyle = window.getComputedStyle(leftPage);
+      const rightStyle = window.getComputedStyle(rightPage);
 
       return {
-        count: cards.length,
-        columns: rowCols,
-        cardWidth: firstRect.width,
-        cardHeight: firstRect.height,
-        imgWidth: imgRect ? imgRect.width : 0,
-        imgHeight: imgRect ? imgRect.height : 0,
-        imgRatio: imgRect ? (imgRect.width / imgRect.height) : 0,
-        hasYellowBg,
-        imgBg,
-        overflow,
-        allHaveLinks: cards.every((c, idx) => {
-          const no = String(idx + 1).padStart(2, '0');
-          return c.getAttribute('href') === `/assets/images/menu-page-${no}.webp` &&
-                 c.getAttribute('target') === '_blank';
-        })
+        exists: true,
+        bookWidth: bookRect.width,
+        contWidth: contRect.width,
+        spreadWidth: spreadRect.width,
+        spreadHeight: spreadRect.height,
+        ratio: spreadRect.width / spreadRect.height,
+        leftDisplay: leftStyle.display,
+        rightDisplay: rightStyle.display,
+        counter: counter ? counter.textContent.trim() : '',
+        bookOccupancyPct: (bookRect.width / contRect.width) * 100,
+        hasPdfLink: !!pdfLink,
+        hasZoomAllBtn: !!zoomAllBtn
       };
     });
 
-    const isColsValid = Array.isArray(vp.expectedCols)
-      ? vp.expectedCols.includes(cardInfo.columns)
-      : cardInfo.columns === vp.expectedCols;
+    if (!metrics.exists) {
+      console.error(`  FAIL: Flipbook menu element missing in #menu-goc`);
+      allPassed = false;
+      await p.close();
+      continue;
+    }
 
-    console.log(`  [${vp.name}]:`);
-    console.log(`    Cards count: ${cardInfo.count} (expected 15)`);
-    console.log(`    Columns: ${cardInfo.columns} (expected ${JSON.stringify(vp.expectedCols)})`);
-    console.log(`    Card size: ${cardInfo.cardWidth.toFixed(1)}px x ${cardInfo.cardHeight.toFixed(1)}px`);
-    console.log(`    Image size: ${cardInfo.imgWidth.toFixed(1)}px x ${cardInfo.imgHeight.toFixed(1)}px (Aspect ratio: ${cardInfo.imgRatio.toFixed(4)})`);
-    console.log(`    No yellow letterbox bg: ${!cardInfo.hasYellowBg}`);
-    console.log(`    No horizontal overflow: ${!cardInfo.overflow}`);
+    console.log(`    Menu Book width: ${metrics.bookWidth.toFixed(1)}px (${metrics.bookOccupancyPct.toFixed(1)}% of container)`);
+    console.log(`    Spread dimensions: ${metrics.spreadWidth.toFixed(1)}px x ${metrics.spreadHeight.toFixed(1)}px (Aspect ratio: ${metrics.ratio.toFixed(4)})`);
+    console.log(`    Pages visible: Left = ${metrics.leftDisplay}, Right = ${metrics.rightDisplay}`);
+    console.log(`    Counter: "${metrics.counter}"`);
 
-    const expectedRatio = 901 / 1680; // 0.5363
-
-    if (cardInfo.count !== 15) {
-      console.error(`FAIL: Expected 15 cards, got ${cardInfo.count}`);
-      allPassed = false;
-    }
-    if (!isColsValid) {
-      console.error(`FAIL: Expected ${JSON.stringify(vp.expectedCols)} columns on ${vp.name}, got ${cardInfo.columns}`);
-      allPassed = false;
-    }
-    if (Math.abs(cardInfo.imgRatio - expectedRatio) > 0.02) {
-      console.error(`FAIL: Image aspect ratio ${cardInfo.imgRatio.toFixed(4)} differs from expected ${expectedRatio.toFixed(4)}`);
-      allPassed = false;
-    }
-    if (cardInfo.hasYellowBg) {
-      console.error(`FAIL: Yellow letterbox background detected on ${vp.name}`);
-      allPassed = false;
-    }
-    if (cardInfo.overflow) {
-      console.error(`FAIL: Horizontal overflow detected on ${vp.name}`);
-      allPassed = false;
-    }
-    if (!cardInfo.allHaveLinks) {
-      console.error(`FAIL: Some cards do not link to full-size image in new tab`);
+    // Verify Both Pages Visible
+    if (metrics.leftDisplay === 'none' || metrics.rightDisplay === 'none') {
+      console.error(`  FAIL: Both pages must be visible`);
       allPassed = false;
     }
 
-    // Check that card height is reasonable (not 960+px or 1008px!)
-    if (vp.width <= 768 && cardInfo.cardHeight > 600) {
-      console.error(`FAIL: Card height ${cardInfo.cardHeight}px is excessively tall on ${vp.name}`);
+    // Verify Sizing Constraints
+    if (metrics.bookWidth < vp.minBookW || metrics.bookWidth > vp.maxBookW) {
+      console.error(`  FAIL: Book width ${metrics.bookWidth.toFixed(1)}px out of range [${vp.minBookW}, ${vp.maxBookW}] on ${vp.name}`);
+      allPassed = false;
+    } else {
+      console.log(`    ✔ Book width ${metrics.bookWidth.toFixed(1)}px is within expected range [${vp.minBookW}, ${vp.maxBookW}]`);
+    }
+
+    const expectedRatio = 1802 / 1680;
+    if (Math.abs(metrics.ratio - expectedRatio) > 0.02) {
+      console.error(`  FAIL: Aspect ratio ${metrics.ratio} deviated from expected ${expectedRatio}`);
+      allPassed = false;
+    } else {
+      console.log(`    ✔ Aspect ratio preserved (${metrics.ratio.toFixed(4)})`);
+    }
+
+    if (!metrics.hasPdfLink) {
+      console.error(`  FAIL: PDF download link missing on /thuc-don.html`);
       allPassed = false;
     }
-    if (vp.width === 1440 && cardInfo.cardHeight > 600) {
-      console.error(`FAIL: Card height ${cardInfo.cardHeight}px is excessively tall on Desktop (was ~1008px)`);
+    if (!metrics.hasZoomAllBtn) {
+      console.error(`  FAIL: [data-open-zoom-all] button missing on /thuc-don.html`);
       allPassed = false;
     }
 
-    console.log(`    ✔ All checks passed for ${vp.name}`);
+    // Test Flipping
+    const nextBtn = await p.$('#menu-goc [data-menu-next]');
+    const prevBtn = await p.$('#menu-goc [data-menu-prev]');
+
+    await nextBtn.click();
+    await sleep(750);
+
+    const afterNext = await p.evaluate(() => {
+      const counter = document.querySelector('#menu-goc [data-menu-counter]');
+      return counter ? counter.textContent.trim() : '';
+    });
+    console.log(`    After Next: Counter = "${afterNext}"`);
+    if (afterNext !== 'Trang 3–4 / 15') {
+      console.error(`  FAIL: Expected "Trang 3–4 / 15", got "${afterNext}"`);
+      allPassed = false;
+    }
+
+    await prevBtn.click();
+    await sleep(850);
+
+    const afterPrev = await p.evaluate(() => {
+      const counter = document.querySelector('#menu-goc [data-menu-counter]');
+      return counter ? counter.textContent.trim() : '';
+    });
+    console.log(`    After Prev: Counter = "${afterPrev}"`);
+    if (afterPrev !== 'Trang 1–2 / 15') {
+      console.error(`  FAIL: Expected "Trang 1–2 / 15", got "${afterPrev}"`);
+      allPassed = false;
+    }
+    console.log(`    ✔ Page flipping forward and backward verified`);
+
+    // Test Tap-to-Zoom
+    await p.click('#menu-goc .menu-book-page--right');
+    await sleep(400);
+    const zoomOpen = await p.evaluate(() => {
+      const m = document.querySelector('#menu-zoom-modal');
+      return m && m.classList.contains('open') && !m.hidden;
+    });
+    if (!zoomOpen) {
+      console.error(`  FAIL: Zoom modal did not open`);
+      allPassed = false;
+    }
+
+    await p.click('.menu-zoom-close');
+    await sleep(400);
+    const zoomClosed = await p.evaluate(() => {
+      const m = document.querySelector('#menu-zoom-modal');
+      return m && (!m.classList.contains('open') || m.hidden);
+    });
+    if (!zoomClosed) {
+      console.error(`  FAIL: Zoom modal did not close`);
+      allPassed = false;
+    }
+    console.log(`    ✔ Tap-to-zoom and close verified`);
+
+    // Test data-open-zoom-all button
+    await p.evaluate(() => {
+      const btn = document.querySelector('#menu-goc [data-open-zoom-all]');
+      if (btn) btn.click();
+    });
+    await sleep(400);
+    const zoomAllOpen = await p.evaluate(() => {
+      const m = document.querySelector('#menu-zoom-modal');
+      return m && m.classList.contains('open') && !m.hidden;
+    });
+    if (!zoomAllOpen) {
+      console.error(`  FAIL: [data-open-zoom-all] did not open zoom modal`);
+      allPassed = false;
+    }
+    await p.evaluate(() => {
+      const closeBtn = document.querySelector('.menu-zoom-close');
+      if (closeBtn) closeBtn.click();
+    });
+    await sleep(400);
+    console.log(`    ✔ [data-open-zoom-all] button verified`);
+
     await p.close();
   }
+
+  // 9. Test /lien-he.html Google Maps link and Notice Removal
+  console.log(`\n========================================`);
+  console.log(`Testing Contact Page (/lien-he.html)`);
+  console.log(`========================================`);
+  const contactP = await browser.newPage();
+  await contactP.goto(`${baseUrl}/lien-he.html`, { waitUntil: 'networkidle0' });
+
+  const contactInfo = await contactP.evaluate(() => {
+    const mapLink = document.querySelector('[data-link="map"]');
+    const notice = document.querySelector('.notice');
+    const bodyText = document.body.innerText;
+    return {
+      mapHref: mapLink ? mapLink.getAttribute('href') : '',
+      mapTarget: mapLink ? mapLink.getAttribute('target') : '',
+      mapRel: mapLink ? mapLink.getAttribute('rel') : '',
+      hasNoticeElement: !!notice,
+      containsNoticeText: bodyText.includes('SePay xét duyệt')
+    };
+  });
+
+  console.log(`  Google Maps Link: href="${contactInfo.mapHref}", target="${contactInfo.mapTarget}", rel="${contactInfo.mapRel}"`);
+  console.log(`  Notice element removed: ${!contactInfo.hasNoticeElement}`);
+  console.log(`  Notice text removed: ${!contactInfo.containsNoticeText}`);
+
+  const expectedMapUrl = 'https://share.google/Sk8WSTpvcjp1EKxP2';
+  if (contactInfo.mapHref !== expectedMapUrl) {
+    console.error(`FAIL: Expected map href "${expectedMapUrl}", got "${contactInfo.mapHref}"`);
+    allPassed = false;
+  }
+  if (contactInfo.mapTarget !== '_blank') {
+    console.error(`FAIL: Expected map target "_blank", got "${contactInfo.mapTarget}"`);
+    allPassed = false;
+  }
+  if (!contactInfo.mapRel.includes('noopener') || !contactInfo.mapRel.includes('noreferrer')) {
+    console.error(`FAIL: Expected map rel "noopener noreferrer", got "${contactInfo.mapRel}"`);
+    allPassed = false;
+  }
+  if (contactInfo.hasNoticeElement || contactInfo.containsNoticeText) {
+    console.error(`FAIL: Notice box or text still present on /lien-he.html`);
+    allPassed = false;
+  } else {
+    console.log(`  ✔ Contact page Google Maps link and notice removal verified`);
+  }
+  await contactP.close();
 
   await browser.close();
   server.close();

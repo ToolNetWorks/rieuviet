@@ -65,6 +65,39 @@ def overlays():
 def pagehero(tag, title, sub):
     return f'<section class="page-hero"><div class="container"><div class="eyebrow">{tag}</div><h1>{title}</h1><p>{sub}</p></div></section>'
 
+def menu_book(fallback_html=None):
+    if fallback_html is None:
+        fallback_html = '<a class="text-link" href="/thuc-don.html#menu-goc" style="color:#f4cc98">Xem toàn bộ 15 trang thực đơn <span aria-hidden="true">↗</span></a>'
+    return (
+        ' <div class="menu-book" data-menu-book role="region" aria-label="Sách thực đơn RIEU VIỆT">\n'
+        '   <div class="menu-book-stage">\n'
+        '     <div class="menu-book-spread">\n'
+        '       <div class="menu-book-page menu-book-page--left" data-zoom-page="left" role="button" tabindex="0" aria-label="Chạm để phóng to trang trái">\n'
+        '         <img src="/assets/images/menu-page-01.webp" alt="Trang 1 trong thực đơn RIEU VIỆT" width="901" height="1680" loading="eager" decoding="async" draggable="false">\n'
+        '         <span class="menu-book-zoom-badge" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg><span>Phóng to</span></span>\n'
+        '       </div>\n'
+        '       <div class="menu-book-page menu-book-page--right" data-zoom-page="right" role="button" tabindex="0" aria-label="Chạm để phóng to trang phải">\n'
+        '         <img src="/assets/images/menu-page-02.webp" alt="Trang 2 trong thực đơn RIEU VIỆT" width="901" height="1680" loading="lazy" decoding="async" draggable="false">\n'
+        '         <span class="menu-book-zoom-badge" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg><span>Phóng to</span></span>\n'
+        '         <div class="menu-book-end" aria-hidden="true"><span class="menu-book-end-title">RIEU VIỆT</span><span class="menu-book-end-sub">Đậm đà hương Việt</span></div>\n'
+        '       </div>\n'
+        '       <div class="menu-book-flip" data-menu-flip aria-hidden="true">\n'
+        '         <div class="menu-book-flip-face menu-book-flip-front"><img alt="" width="901" height="1680" draggable="false"></div>\n'
+        '         <div class="menu-book-flip-face menu-book-flip-back"><img alt="" width="901" height="1680" draggable="false"></div>\n'
+        '       </div>\n'
+        '     </div>\n'
+        '   </div>\n'
+        '   <div class="menu-book-controls">\n'
+        '     <button class="menu-book-btn" type="button" data-menu-prev disabled aria-label="Trang trước">Trang trước</button>\n'
+        '     <p class="menu-book-counter" data-menu-counter aria-live="polite">Trang 1–2 / 15</p>\n'
+        '     <button class="menu-book-btn" type="button" data-menu-next aria-label="Trang sau">Trang sau</button>\n'
+        '   </div>\n'
+        '   <div class="menu-book-fallback">\n'
+        f'     {fallback_html}\n'
+        '   </div>\n'
+        ' </div>'
+    )
+
 def page(title, desc, active, content, canonical, versions, og_type='website'):
     titlefull = f'{title} | RIEU VIỆT — Lẩu Riêu & Ẩm Thực Việt' if title != 'Trang chủ' else 'RIEU VIỆT — Lẩu Riêu Đậm Đà Hương Việt | Thực Đơn & Đặt Bàn'
     css_v = versions['css']
