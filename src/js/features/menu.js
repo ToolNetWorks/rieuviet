@@ -110,7 +110,7 @@ export function renderMenuPages() {
     const no = String(i + 1).padStart(2, '0');
     return `
       <a class="menu-page" href="/assets/images/menu-page-${no}.webp" target="_blank" rel="noopener" aria-label="Mở trang ${i + 1} của thực đơn">
-        <img src="/assets/images/menu-page-${no}.webp" alt="Trang ${i + 1} của thực đơn RIEU VIỆT" loading="lazy" width="514" height="960">
+        <img src="/assets/images/menu-page-${no}.webp" alt="Trang ${i + 1} của thực đơn RIEU VIỆT" loading="lazy" width="901" height="1680">
         <span>Trang ${i + 1}</span>
       </a>`;
   }).join('');

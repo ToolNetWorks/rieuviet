@@ -265,6 +265,111 @@ async function run() {
   }
   await menuPage.close();
 
+  // 8. Test /thuc-don.html 15 Original Menu Pages across Viewports
+  console.log(`\n========================================`);
+  console.log(`Testing 15 Original Menu Pages Layout (/thuc-don.html)`);
+  console.log(`========================================`);
+  const menuViewports = [
+    { name: 'Desktop 1440px', width: 1440, height: 900, expectedCols: [3, 4] },
+    { name: 'Tablet 1024px', width: 1024, height: 1366, expectedCols: [2, 3] },
+    { name: 'Tablet 768px', width: 768, height: 1024, expectedCols: [2, 3] },
+    { name: 'Mobile 390px', width: 390, height: 844, expectedCols: 2 }
+  ];
+
+  for (const vp of menuViewports) {
+    const p = await browser.newPage();
+    await p.setViewport({ width: vp.width, height: vp.height });
+    await p.goto(`${baseUrl}/thuc-don.html`, { waitUntil: 'networkidle0' });
+
+    const cardInfo = await p.evaluate(() => {
+      const cards = Array.from(document.querySelectorAll('#menu-pages .menu-page'));
+      if (cards.length === 0) return { count: 0 };
+
+      const firstCard = cards[0];
+      const firstImg = firstCard.querySelector('img');
+      const firstRect = firstCard.getBoundingClientRect();
+      const imgRect = firstImg ? firstImg.getBoundingClientRect() : null;
+      const imgBg = firstImg ? window.getComputedStyle(firstImg).backgroundColor : '';
+
+      // Determine number of columns by counting cards on the same Y position
+      const firstY = Math.round(firstRect.top);
+      const rowCols = cards.filter(c => Math.abs(Math.round(c.getBoundingClientRect().top) - firstY) < 5).length;
+
+      const hasYellowBg = imgBg.includes('230, 201, 149') || imgBg.includes('e6c995');
+      const overflow = document.documentElement.scrollWidth > window.innerWidth;
+
+      return {
+        count: cards.length,
+        columns: rowCols,
+        cardWidth: firstRect.width,
+        cardHeight: firstRect.height,
+        imgWidth: imgRect ? imgRect.width : 0,
+        imgHeight: imgRect ? imgRect.height : 0,
+        imgRatio: imgRect ? (imgRect.width / imgRect.height) : 0,
+        hasYellowBg,
+        imgBg,
+        overflow,
+        allHaveLinks: cards.every((c, idx) => {
+          const no = String(idx + 1).padStart(2, '0');
+          return c.getAttribute('href') === `/assets/images/menu-page-${no}.webp` &&
+                 c.getAttribute('target') === '_blank';
+        })
+      };
+    });
+
+    const isColsValid = Array.isArray(vp.expectedCols)
+      ? vp.expectedCols.includes(cardInfo.columns)
+      : cardInfo.columns === vp.expectedCols;
+
+    console.log(`  [${vp.name}]:`);
+    console.log(`    Cards count: ${cardInfo.count} (expected 15)`);
+    console.log(`    Columns: ${cardInfo.columns} (expected ${JSON.stringify(vp.expectedCols)})`);
+    console.log(`    Card size: ${cardInfo.cardWidth.toFixed(1)}px x ${cardInfo.cardHeight.toFixed(1)}px`);
+    console.log(`    Image size: ${cardInfo.imgWidth.toFixed(1)}px x ${cardInfo.imgHeight.toFixed(1)}px (Aspect ratio: ${cardInfo.imgRatio.toFixed(4)})`);
+    console.log(`    No yellow letterbox bg: ${!cardInfo.hasYellowBg}`);
+    console.log(`    No horizontal overflow: ${!cardInfo.overflow}`);
+
+    const expectedRatio = 901 / 1680; // 0.5363
+
+    if (cardInfo.count !== 15) {
+      console.error(`FAIL: Expected 15 cards, got ${cardInfo.count}`);
+      allPassed = false;
+    }
+    if (!isColsValid) {
+      console.error(`FAIL: Expected ${JSON.stringify(vp.expectedCols)} columns on ${vp.name}, got ${cardInfo.columns}`);
+      allPassed = false;
+    }
+    if (Math.abs(cardInfo.imgRatio - expectedRatio) > 0.02) {
+      console.error(`FAIL: Image aspect ratio ${cardInfo.imgRatio.toFixed(4)} differs from expected ${expectedRatio.toFixed(4)}`);
+      allPassed = false;
+    }
+    if (cardInfo.hasYellowBg) {
+      console.error(`FAIL: Yellow letterbox background detected on ${vp.name}`);
+      allPassed = false;
+    }
+    if (cardInfo.overflow) {
+      console.error(`FAIL: Horizontal overflow detected on ${vp.name}`);
+      allPassed = false;
+    }
+    if (!cardInfo.allHaveLinks) {
+      console.error(`FAIL: Some cards do not link to full-size image in new tab`);
+      allPassed = false;
+    }
+
+    // Check that card height is reasonable (not 960+px or 1008px!)
+    if (vp.width <= 768 && cardInfo.cardHeight > 600) {
+      console.error(`FAIL: Card height ${cardInfo.cardHeight}px is excessively tall on ${vp.name}`);
+      allPassed = false;
+    }
+    if (vp.width === 1440 && cardInfo.cardHeight > 600) {
+      console.error(`FAIL: Card height ${cardInfo.cardHeight}px is excessively tall on Desktop (was ~1008px)`);
+      allPassed = false;
+    }
+
+    console.log(`    ✔ All checks passed for ${vp.name}`);
+    await p.close();
+  }
+
   await browser.close();
   server.close();
 
