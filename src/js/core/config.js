@@ -16,11 +16,22 @@ export function renderConfig() {
   });
 
   $$('[data-config="phone"]').forEach(node => {
-    node.textContent = label(cfg.phone, 'Đang cập nhật số điện thoại');
+    const display = cfg.phoneDisplay || (cfg.phone2 ? `${cfg.phone} · ${cfg.phone2}` : cfg.phone);
+    if (node.tagName.toLowerCase() === 'span' && (cfg.phone || cfg.phone2)) {
+      const p1 = cfg.phone ? `<a href="tel:${cfg.phone.replace(/[^\d+]/g, '')}">${cfg.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}</a>` : '';
+      const p2 = cfg.phone2 ? `<a href="tel:${cfg.phone2.replace(/[^\d+]/g, '')}">${cfg.phone2.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}</a>` : '';
+      node.innerHTML = [p1, p2].filter(Boolean).join(' · ');
+    } else {
+      node.textContent = label(display, 'Đang cập nhật số điện thoại');
+    }
   });
 
   $$('[data-config="email"]').forEach(node => {
-    node.textContent = label(cfg.email, 'Đang cập nhật email liên hệ');
+    if (node.tagName.toLowerCase() === 'span' && cfg.email?.trim()) {
+      node.innerHTML = `<a href="mailto:${cfg.email.trim()}">${cfg.email.trim()}</a>`;
+    } else {
+      node.textContent = label(cfg.email, 'Đang cập nhật email liên hệ');
+    }
   });
 
   $$('[data-config="openingHours"]').forEach(node => {
@@ -36,8 +47,9 @@ export function renderConfig() {
   });
 
   $$('[data-link="phone"]').forEach(node => {
-    if (cfg.phone?.trim()) {
-      node.href = `tel:${cfg.phone.replace(/[^\d+]/g, '')}`;
+    const primaryPhone = cfg.phone?.trim() || cfg.phone2?.trim();
+    if (primaryPhone) {
+      node.href = `tel:${primaryPhone.replace(/[^\d+]/g, '')}`;
       return;
     }
     node.href = '/lien-he.html';
@@ -67,9 +79,10 @@ export function renderConfig() {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',
     name: 'RIEU VIỆT',
-    url: 'https://rieuviet.com',
+    legalName: cfg.legalName || 'CÔNG TY CỔ PHẦN DỊCH VỤ THƯƠNG MẠI RIÊU VIỆT',
+    url: cfg.domain || 'https://rieuviet.vn',
     servesCuisine: 'Vietnamese',
-    hasMenu: 'https://rieuviet.com/thuc-don'
+    hasMenu: `${cfg.domain || 'https://rieuviet.vn'}/thuc-don`
   };
   if (cfg.address?.trim()) {
     ld.address = {

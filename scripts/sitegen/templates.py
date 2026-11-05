@@ -27,10 +27,10 @@ def footer():
     policies = ''.join(f'<li><a href="{u}">{n}</a></li>' for n, u in POLICIES)
     return (
         f'<footer class="footer" id="footer"><div class="container"><div class="footer-main">\n'
-        f'  <div>{brand()}<p style="margin-top:22px;max-width:310px">RIEU VIỆT — thực đơn lẩu riêu và các món ăn Việt. Giá món ăn được giới thiệu theo thực đơn của nhà hàng.</p><p>Website: <a href="https://rieuviet.com">rieuviet.com</a></p></div>\n'
+        f'  <div>{brand()}<p style="margin-top:22px;max-width:310px">RIEU VIỆT — thực đơn lẩu riêu và các món ăn Việt. Giá món ăn được giới thiệu theo thực đơn của nhà hàng.</p><p>Website: <a href="https://rieuviet.vn">rieuviet.vn</a></p></div>\n'
         f'  <div><h4>Khám phá</h4><ul><li><a href="/">Trang chủ</a></li><li><a href="/thuc-don.html">Thực đơn & bảng giá</a></li><li><a href="/gioi-thieu.html">Giới thiệu</a></li><li><a href="/#dat-ban">Đặt bàn</a></li><li><a href="/lien-he.html">Liên hệ</a></li></ul></div>\n'
         f'  <div><h4>Chính sách</h4><ul>{policies}</ul></div>\n'
-        f'  <div><h4>Thông tin đơn vị</h4><div class="legal-info"><div><b>Tên đơn vị:</b> <span data-config="legalName"></span></div><div><b>MST:</b> <span data-config="taxCode"></span></div><div><b>Địa chỉ:</b> <span data-config="address"></span></div><div><b>Điện thoại:</b> <span data-config="phone"></span></div><div><b>Email:</b> <span data-config="email"></span></div></div></div>\n'
+        f'  <div><h4>Thông tin đơn vị</h4><div class="legal-info"><div><b>Tên đơn vị:</b> <span data-config="legalName">CÔNG TY CỔ PHẦN DỊCH VỤ THƯƠNG MẠI RIÊU VIỆT</span></div><div><b>MST:</b> <span data-config="taxCode">2300954297</span></div><div><b>Địa chỉ:</b> <span data-config="address">Số 01 Hàn Mạc Tử, Phường Kinh Bắc, Bắc Ninh, Việt Nam</span></div><div><b>Điện thoại:</b> <span data-config="phone"><a href="tel:0859433333">0859 433 333</a> · <a href="tel:0814133333">0814 133 333</a></span></div><div><b>Email:</b> <span data-config="email"><a href="mailto:marketing.rieuviet@gmail.com">marketing.rieuviet@gmail.com</a></span></div></div></div>\n'
         f' </div><div class="footer-bottom"><span>© 2026 RIEU VIỆT. Bảo lưu quyền thương hiệu theo quy định pháp luật.</span><span>Website giới thiệu thực đơn · Chưa thu thập thông tin thẻ thanh toán</span></div></div></footer>\n'
         f' <button class="float-cart" data-open-cart aria-label="Mở danh sách món">{CART_ICON} Đã chọn <span id="float-cart-count">0</span> món</button>'
     )
@@ -74,8 +74,8 @@ def page(title, desc, active, content, canonical, versions, og_type='website'):
 
     return (
         f'<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#752832">\n'
-        f' <title>{escape(titlefull)}</title><meta name="description" content="{escape(desc, quote=True)}"><link rel="canonical" href="https://rieuviet.com{canonical}">\n'
-        f' <meta property="og:type" content="{og_type}"><meta property="og:locale" content="vi_VN"><meta property="og:site_name" content="RIEU VIỆT"><meta property="og:title" content="{escape(titlefull, quote=True)}"><meta property="og:description" content="{escape(desc, quote=True)}"><meta property="og:url" content="https://rieuviet.com{canonical}"><meta property="og:image" content="https://rieuviet.com/assets/images/lau-rieu-450.webp"><meta name="twitter:card" content="summary_large_image">\n'
+        f' <title>{escape(titlefull)}</title><meta name="description" content="{escape(desc, quote=True)}"><link rel="canonical" href="https://rieuviet.vn{canonical}">\n'
+        f' <meta property="og:type" content="{og_type}"><meta property="og:locale" content="vi_VN"><meta property="og:site_name" content="RIEU VIỆT"><meta property="og:title" content="{escape(titlefull, quote=True)}"><meta property="og:description" content="{escape(desc, quote=True)}"><meta property="og:url" content="https://rieuviet.vn{canonical}"><meta property="og:image" content="https://rieuviet.vn/assets/images/lau-rieu-450.webp"><meta name="twitter:card" content="summary_large_image">\n'
         f' <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/assets/styles.css?v={css_v}"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
         f' <script defer src="/assets/config.js?v={config_v}"></script><script defer src="/assets/menu-data.js?v={menu_data_v}"></script><script defer src="/assets/site.js?v={site_v}"></script></head>\n'
         f' <body>{header(active)}<main id="main">{content}</main>{footer()}{overlays()}</body></html>'

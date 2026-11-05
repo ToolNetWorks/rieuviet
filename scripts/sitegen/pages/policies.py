@@ -8,7 +8,7 @@ POLICIES_DATA = {
         'Chính sách thanh toán',
         'Thông tin hình thức thanh toán và nguyên tắc xác nhận đơn của RIEU VIỆT',
         [
-            ('1. Phạm vi thanh toán', 'Website rieuviet.com cung cấp thông tin món ăn và giá tham khảo theo thực đơn. Yêu cầu đặt bàn hoặc chọn món qua giao diện chưa mặc nhiên tạo thành đơn hàng đã được nhà hàng xác nhận.'),
+            ('1. Phạm vi thanh toán', 'Website rieuviet.vn cung cấp thông tin món ăn và giá tham khảo theo thực đơn. Yêu cầu đặt bàn hoặc chọn món qua giao diện chưa mặc nhiên tạo thành đơn hàng đã được nhà hàng xác nhận.'),
             ('2. Giá và xác nhận đơn', 'Giá được hiển thị bằng đồng Việt Nam (VNĐ). Nhà hàng sẽ xác nhận món, số lượng, tổng tiền và phương thức thanh toán áp dụng tại thời điểm phục vụ hoặc khi liên hệ trực tiếp. Nếu có sai khác so với giá trên website, khách hàng có quyền không xác nhận yêu cầu.'),
             ('3. Phương thức thanh toán', 'Hiện tại website chưa kích hoạt thu tiền bằng thẻ quốc tế. Khách hàng chỉ thanh toán theo phương thức được nhà hàng xác nhận trực tiếp. Không chuyển tiền cho tài khoản hoặc đường dẫn lạ không được nhà hàng xác minh.'),
             ('4. Thanh toán thẻ qua SePay', 'Hình thức thanh toán thẻ Visa/Mastercard/JCB (nếu được SePay phê duyệt) chỉ xuất hiện sau khi hệ thống tích hợp và vận hành chính thức. Website không thu thập, lưu hoặc xử lý trực tiếp số thẻ, mã CVV/CVC.'),
@@ -38,7 +38,7 @@ POLICIES_DATA = {
     ),
     'chinh-sach-bao-mat': (
         'Chính sách bảo mật',
-        'Thông tin về dữ liệu và quyền riêng tư khi sử dụng rieuviet.com',
+        'Thông tin về dữ liệu và quyền riêng tư khi sử dụng rieuviet.vn',
         [
             ('1. Dữ liệu được sử dụng', 'Website cho phép khách chọn món và chuẩn bị thông tin đặt bàn. Ở phiên bản hiện tại, danh sách món được lưu trong bộ nhớ trình duyệt (localStorage) trên thiết bị của khách để ghi nhớ lựa chọn; website chưa gửi phiếu đặt bàn hoặc thông tin khách hàng lên hệ thống máy chủ.'),
             ('2. Thông tin khách chủ động cung cấp', 'Tên, số điện thoại và ghi chú chỉ được dùng để tạo nội dung yêu cầu mà khách có thể sao chép và tự gửi cho nhà hàng qua kênh liên hệ chính thức. Khi khách gửi tin qua các ứng dụng bên ngoài, chính sách dữ liệu của ứng dụng đó cũng có thể áp dụng.'),
@@ -50,9 +50,9 @@ POLICIES_DATA = {
     ),
     'dieu-khoan-su-dung': (
         'Điều khoản sử dụng',
-        'Điều kiện truy cập, sử dụng thông tin và đặt món tại rieuviet.com',
+        'Điều kiện truy cập, sử dụng thông tin và đặt món tại rieuviet.vn',
         [
-            ('1. Chủ thể website', 'rieuviet.com là website giới thiệu nhà hàng RIEU VIỆT. Tên pháp lý, mã số thuế và thông tin liên hệ của đơn vị vận hành phải được chủ sở hữu khai báo đúng và công bố trên website.'),
+            ('1. Chủ thể website', 'rieuviet.vn là website giới thiệu nhà hàng RIEU VIỆT. Tên pháp lý, mã số thuế và thông tin liên hệ của đơn vị vận hành phải được chủ sở hữu khai báo đúng và công bố trên website.'),
             ('2. Thông tin thực đơn', 'Hình ảnh món ăn và giá bán được tham chiếu từ menu do nhà hàng cung cấp. Thông tin có thể được cập nhật theo thực tế; giá và tình trạng phục vụ cuối cùng cần được nhân viên xác nhận trực tiếp.'),
             ('3. Yêu cầu đặt bàn / chọn món', 'Chức năng chọn món và tạo phiếu trên website là công cụ hỗ trợ; không tự gửi yêu cầu cho nhà hàng và không có giá trị xác nhận đơn, giữ chỗ hoặc thanh toán.'),
             ('4. Nghĩa vụ người dùng', 'Khách truy cập cần cung cấp thông tin liên lạc chính xác khi liên hệ nhà hàng và không sử dụng website cho mục đích gây gián đoạn dịch vụ hoặc vi phạm pháp luật.'),
@@ -69,11 +69,11 @@ def get_policy_content(slug):
         prose += '<div class="note"><b>Trạng thái hiện tại:</b> <span data-config="onlinePayment"></span></div>'
     prose += (
         '<h2>Thông tin liên hệ</h2>'
-        '<p>Đơn vị kinh doanh: <span data-config="legalName"></span><br>'
-        'Mã số thuế: <span data-config="taxCode"></span><br>'
-        'Địa chỉ: <span data-config="address"></span><br>'
-        'Điện thoại: <span data-config="phone"></span><br>'
-        'Email: <span data-config="email"></span></p>'
+        '<p>Đơn vị kinh doanh: <span data-config="legalName">CÔNG TY CỔ PHẦN DỊCH VỤ THƯƠNG MẠI RIÊU VIỆT</span><br>'
+        'Mã số thuế: <span data-config="taxCode">2300954297</span><br>'
+        'Địa chỉ: <span data-config="address">Số 01 Hàn Mạc Tử, Phường Kinh Bắc, Bắc Ninh, Việt Nam</span><br>'
+        'Điện thoại: <span data-config="phone"><a href="tel:0859433333">0859 433 333</a> · <a href="tel:0814133333">0814 133 333</a></span><br>'
+        'Email: <span data-config="email"><a href="mailto:marketing.rieuviet@gmail.com">marketing.rieuviet@gmail.com</a></span></p>'
     )
     hero = pagehero('CHÍNH SÁCH RIEU VIỆT', title, desc)
     body = (

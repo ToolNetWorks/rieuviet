@@ -1,18 +1,19 @@
-/* Sửa các trường bên dưới đúng theo giấy phép kinh doanh và thông tin quán.
-   Không tự thêm tên công ty, MST, số điện thoại hay địa chỉ chưa xác minh. */
+/* Thông tin pháp lý và cấu hình RIEU VIỆT theo giấy phép kinh doanh */
 window.RIEU_CONFIG = {
   brand: 'RIEU VIỆT',
   tagline: 'Đậm đà hương Việt',
-  domain: 'https://rieuviet.com',
-  legalName: '',
-  taxCode: '',
-  address: '',
-  phone: '', // Dùng 0xxxxxxxxx, không có khoảng trắng
-  email: '',
-  openingHours: '', // VD: '10:00 – 22:00, tất cả các ngày'
-  mapUrl: '', // URL chia sẻ của Google Maps nếu có
+  domain: 'https://rieuviet.vn',
+  legalName: 'CÔNG TY CỔ PHẦN DỊCH VỤ THƯƠNG MẠI RIÊU VIỆT',
+  taxCode: '2300954297',
+  address: 'Số 01 Hàn Mạc Tử, Phường Kinh Bắc, Bắc Ninh, Việt Nam',
+  phone: '0859433333',
+  phone2: '0814133333',
+  phoneDisplay: '0859 433 333 · 0814 133 333',
+  email: 'marketing.rieuviet@gmail.com',
+  openingHours: '10:00 – 22:30, tất cả các ngày',
+  mapUrl: '', // URL chia sẻ Google Maps
   facebookUrl: '',
-  zaloUrl: '',
+  zaloUrl: 'https://zalo.me/0859433333',
   // Không đổi thành true cho đến khi SePay chính thức kích hoạt merchant và có backend xác minh IPN.
   onlinePaymentEnabled: false
 };
